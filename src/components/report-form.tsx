@@ -25,9 +25,9 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ALERT_CATEGORIES, GOMA_NEIGHBORHOODS } from "@/lib/constants";
-import { submitReport } from "@/lib/actions";
 import React from "react";
-import { useUser } from "@/firebase";
+import { useFirestore, useUser, addDocumentNonBlocking } from "@/firebase";
+import { collection, serverTimestamp } from "firebase/firestore";
 
 const reportFormSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
@@ -45,6 +45,7 @@ export function ReportForm() {
   const { toast } = useToast();
   const [isPending, startTransition] = React.useTransition();
   const { user } = useUser();
+  const firestore = useFirestore();
 
 
   const form = useForm<ReportFormValues>({
@@ -56,37 +57,30 @@ export function ReportForm() {
   });
 
   async function onSubmit(data: ReportFormValues) {
-    if (!user) {
+    if (!user || !firestore) {
         toast({
             variant: "destructive",
             title: "Authentication Required",
             description: "You must be logged in to submit a report.",
         });
-        router.push("/login");
+        if (!user) router.push("/login");
         return;
     }
-
-    const formData = new FormData();
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, String(value));
-    });
-    formData.append('userId', user.uid);
     
-    startTransition(async () => {
-      const result = await submitReport(formData);
-      if (result?.success) {
-        toast({
-          title: "Report Submitted",
-          description: "Thank you! Your report is now pending verification.",
-        });
-        router.push("/");
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Submission Failed",
-          description: result.error || "There was an error submitting your report. Please try again.",
-        });
-      }
+    startTransition(() => {
+      const alertsCollection = collection(firestore, 'alerts');
+      addDocumentNonBlocking(alertsCollection, {
+        ...data,
+        userId: user.uid,
+        status: 'verified', // All reports are automatically verified
+        createdAt: serverTimestamp(),
+      });
+      
+      toast({
+        title: "Report Submitted",
+        description: "Thank you! Your report will appear on the feed shortly.",
+      });
+      router.push("/");
     });
   }
 

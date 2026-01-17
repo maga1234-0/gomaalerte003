@@ -80,6 +80,17 @@ _Shared from Goma Alert Platform_`;
     window.open(whatsappUrl, "_blank");
   };
 
+  const getCreatedAtDate = () => {
+    if (!alert.createdAt) return new Date();
+    // Check if it's a Firestore Timestamp
+    if (typeof (alert.createdAt as any)?.toDate === 'function') {
+      return (alert.createdAt as any).toDate();
+    }
+    // Fallback for string or number date
+    return new Date(alert.createdAt);
+  };
+  const createdAtDate = getCreatedAtDate();
+
   return (
     <Card className={cn("overflow-hidden border-l-4 shadow-sm hover:shadow-md transition-shadow", colorClasses)}>
       <CardHeader>
@@ -94,7 +105,7 @@ _Shared from Goma Alert Platform_`;
             <div className="text-xs text-muted-foreground text-right flex-shrink-0">
                 <p>{alert.location}</p>
                 <p>
-                    {formatDistanceToNow(new Date(alert.createdAt), {
+                    {formatDistanceToNow(createdAtDate, {
                     addSuffix: true,
                     })}
                 </p>
