@@ -64,7 +64,7 @@ export default function LoginPage() {
           <p className="text-sm text-muted-foreground">Or sign in on another device</p>
           {url ? (
             <div className="p-2 bg-white rounded-md">
-              <QRCode value={url} size={128} fgColor="#000000" bgColor="#ffffff" />
+              <QRCode value={url} size={128} />
             </div>
           ) : (
             <Skeleton className="h-36 w-36" />
