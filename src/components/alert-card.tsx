@@ -143,6 +143,9 @@ _Shared from Goma Alert Platform_`;
       title: "Alert Deleted",
       description: "The alert has been permanently removed for all users.",
     });
+
+    // Also hide it from the current user's view immediately for a better UX.
+    onHide(alert.id);
   };
 
   const handleDeleteForMe = () => {
