@@ -212,12 +212,6 @@ _Shared from Goma Alert Platform_`;
         )}
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        {!alert.audioUrl && (
-          <Button variant="ghost" size="sm" onClick={handleShare}>
-            <Share2 className="mr-2 h-4 w-4" />
-            Share via WhatsApp
-          </Button>
-        )}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -226,6 +220,10 @@ _Shared from Goma Alert Platform_`;
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleShare}>
+                    <Share2 className="mr-2 h-4 w-4" />
+                    <span>Share</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleDeleteForMe}>
                     <Trash2 className="mr-2 h-4 w-4" />
                     <span>Delete for me</span>
