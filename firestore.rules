@@ -15,9 +15,11 @@ service cloud.firestore {
       // CREATE: Any signed-in user can create an alert, but they must be the owner.
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
 
-      // UPDATE & DELETE: Not allowed from the client.
+      // UPDATE: Not allowed from the client.
       allow update: if false;
-      allow delete: if false;
+
+      // DELETE: Only the user who created the alert can delete it.
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
   }
 }

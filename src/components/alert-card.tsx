@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -19,8 +18,23 @@ import {
   HeartPulse,
   HelpCircle,
   Share2,
+  Trash2,
 } from "lucide-react";
 import React from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useUser, useFirestore, deleteDocumentNonBlocking } from "@/firebase";
+import { doc } from "firebase/firestore";
+import { useToast } from "@/hooks/use-toast";
 
 interface AlertCardProps {
   alert: Alert;
@@ -67,6 +81,11 @@ const categoryThemes: Record<
 };
 
 export function AlertCard({ alert }: AlertCardProps) {
+  const { user } = useUser();
+  const firestore = useFirestore();
+  const { toast } = useToast();
+
+  const isOwner = user && user.uid === alert.userId;
   const category = alert.category || 'Other';
   const { icon: CategoryIcon, colorClasses, badgeClasses } = categoryThemes[category];
 
@@ -104,6 +123,19 @@ _Shared from Goma Alert Platform_`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, "_blank");
   };
+
+  const handleDelete = () => {
+    if (!firestore || !isOwner) return;
+
+    const alertRef = doc(firestore, 'alerts', alert.id);
+    deleteDocumentNonBlocking(alertRef);
+
+    toast({
+      title: "Alert Deleted",
+      description: "The alert has been successfully removed.",
+    });
+  };
+
 
   const getCreatedAtDate = () => {
     if (!alert.createdAt) return new Date();
@@ -147,7 +179,31 @@ _Shared from Goma Alert Platform_`;
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-end gap-2">
+        {isOwner && (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-red-50">
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete this alert.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
         <Button variant="ghost" size="sm" onClick={handleShare}>
           <Share2 className="mr-2 h-4 w-4" />
           Share via WhatsApp
