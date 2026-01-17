@@ -19,7 +19,7 @@ service cloud.firestore {
       allow update: if false;
 
       // DELETE: Only the user who created the alert can delete it.
-      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow delete: if isSignedIn() && get(/databases/$(database)/documents/alerts/$(alertId)).data.userId == request.auth.uid;
     }
   }
 }
