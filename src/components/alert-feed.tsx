@@ -39,8 +39,8 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
       
       if (newAlert) {
         toast({
-          title: "New Alert Published",
-          description: newAlert.title || "Check the feed for the latest update.",
+          title: "",
+          description: newAlert.title || "",
         });
       }
     }
@@ -67,7 +67,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
         <h1 className="text-3xl font-bold font-headline text-primary text-center md:text-left">
-          ALL alerts
+          
         </h1>
       </div>
 
@@ -81,8 +81,8 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-muted-foreground">
-              <p className="text-lg font-semibold">No alerts found.</p>
-              <p>There are no verified alerts at this time.</p>
+              <p className="text-lg font-semibold"></p>
+              <p></p>
             </div>
           </CardContent>
         </Card>

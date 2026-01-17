@@ -83,8 +83,8 @@ export function ReportForm() {
       if (!supportedMimeType) {
         toast({
             variant: "destructive",
-            title: "Recording not supported",
-            description: "Your browser doesn't support the required audio formats.",
+            title: "",
+            description: "",
         });
         setIsRecordingDialogOpen(false);
         return;
@@ -119,14 +119,14 @@ export function ReportForm() {
       setIsRecording(true);
       setAudioDataUri(null); // Clear previous recording
       toast({
-        title: "Recording Started",
+        title: "",
       });
     } catch (err) {
       console.error("Failed to start recording", err);
       toast({
         variant: "destructive",
-        title: "Recording Failed",
-        description: "Could not access microphone. Please check your browser permissions.",
+        title: "",
+        description: "",
       });
       setIsRecordingDialogOpen(false);
     }
@@ -138,8 +138,8 @@ export function ReportForm() {
       setIsRecording(false);
       setIsRecordingDialogOpen(false);
       toast({
-        title: "Recording Saved",
-        description: "Your audio has been captured for preview.",
+        title: "",
+        description: "",
       });
     }
   };
@@ -152,7 +152,7 @@ export function ReportForm() {
       if (mediaRecorderRef.current && isRecording) {
           mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop()); // Stop mic access
           setIsRecording(false);
-          toast({ title: "Recording Canceled" });
+          toast({ title: "" });
       }
       setIsRecordingDialogOpen(false);
     }
@@ -168,8 +168,8 @@ export function ReportForm() {
     if (!user || !firestore) {
         toast({
             variant: "destructive",
-            title: "Authentication Required",
-            description: "You must be logged in to submit a report.",
+            title: "",
+            description: "",
         });
         if (!user) router.push("/login");
         return;
@@ -198,8 +198,8 @@ export function ReportForm() {
       addDocumentNonBlocking(alertsCollection, reportData);
       
       toast({
-        title: "Report Submitted",
-        description: "Thank you! Your report will appear on the feed shortly.",
+        title: "",
+        description: "",
       });
       router.push("/");
     });
@@ -213,9 +213,9 @@ export function ReportForm() {
           name="title"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
-              <FormLabel>Title (Optional)</FormLabel>
+              <FormLabel></FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Power Outage in Mabanga" {...field} />
+                <Input placeholder="" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -226,10 +226,10 @@ export function ReportForm() {
           name="description"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}>
-              <FormLabel>Description (Optional)</FormLabel>
+              <FormLabel></FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Describe the incident in detail..."
+                  placeholder=""
                   className="min-h-[120px]"
                   {...field}
                 />
@@ -244,11 +244,11 @@ export function ReportForm() {
             name="category"
             render={({ field }) => (
               <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
-                <FormLabel>Category (Optional)</FormLabel>
+                <FormLabel></FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
+                      <SelectValue placeholder="" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -268,11 +268,11 @@ export function ReportForm() {
             name="location"
             render={({ field }) => (
               <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '450ms', animationFillMode: 'backwards' }}>
-                <FormLabel>Location (Optional)</FormLabel>
+                <FormLabel></FormLabel>
                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a neighborhood" />
+                      <SelectValue placeholder="" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -290,14 +290,12 @@ export function ReportForm() {
         </div>
         
         <div className="space-y-2 animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
-            <FormLabel>Vocal Report (Optional)</FormLabel>
+            <FormLabel></FormLabel>
             <div className="rounded-lg border p-4 space-y-4">
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                     <div className="flex-grow w-full">
                         <p className="text-sm text-muted-foreground">
-                            {audioDataUri
-                            ? "A vocal report is saved. You can record a new one or delete the existing one."
-                            : "Press record to start your vocal report."}
+                            
                         </p>
                     </div>
                     
@@ -305,14 +303,14 @@ export function ReportForm() {
                         <DialogTrigger asChild>
                             <Button type="button" disabled={isPending} className="w-full sm:w-auto flex-shrink-0">
                                 <Mic className="mr-2 h-4 w-4" /> 
-                                {audioDataUri ? 'Record Again' : 'Start Recording'}
+                                
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                                <DialogTitle className="text-center">Recording Vocal Report</DialogTitle>
+                                <DialogTitle className="text-center"></DialogTitle>
                                 <DialogDescription className="text-center">
-                                    Speak clearly. Click stop when you are finished.
+                                    
                                 </DialogDescription>
                             </DialogHeader>
                             <div className="flex flex-col items-center justify-center gap-4 py-8">
@@ -325,11 +323,11 @@ export function ReportForm() {
                                     )}
                                 </div>
                                 <p className="text-sm text-muted-foreground">
-                                    {isRecording ? "Recording..." : "Getting ready..."}
+                                    {isRecording ? "" : ""}
                                 </p>
                             </div>
                             <Button type="button" onClick={handleStopRecording} variant="destructive" className="w-full" disabled={!isRecording}>
-                                <Square className="mr-2 h-4 w-4" /> Stop Recording
+                                <Square className="mr-2 h-4 w-4" /> 
                             </Button>
                         </DialogContent>
                     </Dialog>
@@ -337,10 +335,10 @@ export function ReportForm() {
                 
                 {audioDataUri && (
                     <div className="space-y-2 pt-4 border-t">
-                        <p className="text-sm font-medium text-muted-foreground">Recording preview:</p>
+                        <p className="text-sm font-medium text-muted-foreground"></p>
                         <audio src={audioDataUri} controls className="w-full" />
                         <Button variant="link" size="sm" className="p-0 h-auto text-destructive" onClick={() => setAudioDataUri(null)}>
-                            Delete recording
+                            
                         </Button>
                     </div>
                 )}
@@ -348,7 +346,7 @@ export function ReportForm() {
         </div>
 
         <Button type="submit" disabled={isPending || !user} className="animate-in fade-in-0 zoom-in-95 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
-          {isPending ? "Submitting..." : "Submit Report"}
+          {isPending ? "..." : ""}
         </Button>
       </form>
     </Form>

@@ -9,8 +9,8 @@ import { OnlineStatusIndicator } from "@/components/online-status-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Goma Alert",
-  description: "Verified, real-time alerts for Goma, DRC.",
+  title: "",
+  description: "",
 };
 
 export default function RootLayout({

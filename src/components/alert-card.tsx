@@ -101,13 +101,8 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
   const { icon: CategoryIcon, colorClasses, badgeClasses } = categoryThemes[category];
 
   const handleShare = async () => {
-    const title = `Goma Alert: ${alert.title || 'Untitled Alert'}`;
-    const text = `*Goma Alert: ${category}*
-*Title:* ${alert.title || 'Untitled Alert'}
-*Location:* ${alert.location || 'Not specified'}
-*Description:* ${alert.description || 'No description provided.'}
-
-_Shared from Goma Alert Platform_`;
+    const title = ``;
+    const text = ``;
 
     if (alert.audioUrl && navigator.share) {
       try {
@@ -153,8 +148,8 @@ _Shared from Goma Alert Platform_`;
     deleteDocumentNonBlocking(alertRef);
 
     toast({
-      title: "Alert Deleted",
-      description: "The alert has been permanently removed for all users.",
+      title: "",
+      description: "",
     });
 
     // Also hide it from the current user's view immediately for a better UX.
@@ -164,8 +159,8 @@ _Shared from Goma Alert Platform_`;
   const handleDeleteForMe = () => {
     onHide(alert.id);
     toast({
-        title: "Alert Hidden",
-        description: "This alert will no longer be shown on your feed.",
+        title: "",
+        description: "",
     });
   };
 
@@ -200,10 +195,10 @@ _Shared from Goma Alert Platform_`;
                     <CategoryIcon className="h-3 w-3 mr-1" />
                     {category}
                 </Badge>
-                <CardTitle className="font-headline text-xl break-words">{alert.title || "Untitled Alert"}</CardTitle>
+                <CardTitle className="font-headline text-xl break-words">{alert.title || ""}</CardTitle>
             </div>
             <div className="text-xs text-muted-foreground sm:text-right flex-shrink-0 order-1 sm:order-2 w-full sm:w-auto flex justify-between sm:block">
-                <p className="break-all">{alert.location || "Not specified"}</p>
+                <p className="break-all">{alert.location || ""}</p>
                 {createdAtDate && (
                     <p className="flex-shrink-0">
                         {formatDistanceToNow(createdAtDate, {
@@ -219,7 +214,7 @@ _Shared from Goma Alert Platform_`;
         {alert.audioUrl && (
           <div className="mt-4">
             <audio controls src={alert.audioUrl} className="w-full">
-              Your browser does not support the audio element.
+              
             </audio>
           </div>
         )}
@@ -229,17 +224,17 @@ _Shared from Goma Alert Platform_`;
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-9 w-9">
                     <MoreVertical className="h-4 w-4" />
-                    <span className="sr-only">More options</span>
+                    <span className="sr-only"></span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={handleShare}>
                     <Share2 className="mr-2 h-4 w-4" />
-                    <span>Share</span>
+                    <span></span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleDeleteForMe}>
                     <Trash2 className="mr-2 h-4 w-4" />
-                    <span>Delete for me</span>
+                    <span></span>
                 </DropdownMenuItem>
                 {isOwner && (
                     <>
@@ -251,20 +246,20 @@ _Shared from Goma Alert Platform_`;
                                     onSelect={(e) => e.preventDefault()} // Prevents Dropdown from closing
                                 >
                                     <Trash2 className="mr-2 h-4 w-4" />
-                                    <span>Delete for all</span>
+                                    <span></span>
                                 </DropdownMenuItem>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogTitle></AlertDialogTitle>
                                     <AlertDialogDescription>
-                                    This action cannot be undone. This will permanently delete this alert for everyone.
+                                    
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel></AlertDialogCancel>
                                     <AlertDialogAction onClick={handleDeleteForAll} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                    Delete
+                                    
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
