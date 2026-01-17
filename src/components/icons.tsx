@@ -1,5 +1,5 @@
-import { Siren } from "lucide-react";
+import { Bell } from "lucide-react";
 
-export function Logo(props: React.ComponentProps<typeof Siren>) {
-  return <Siren {...props} />;
+export function Logo(props: React.ComponentProps<typeof Bell>) {
+  return <Bell {...props} />;
 }
