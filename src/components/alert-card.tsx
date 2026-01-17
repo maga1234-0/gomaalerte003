@@ -170,7 +170,7 @@ _Shared from Goma Alert Platform_`;
 
 
   const getCreatedAtDate = () => {
-    if (!alert.createdAt) return new Date();
+    if (!alert.createdAt) return null;
     // Check if it's a Firestore Timestamp
     if (typeof (alert.createdAt as any)?.toDate === 'function') {
       return (alert.createdAt as any).toDate();
@@ -193,11 +193,13 @@ _Shared from Goma Alert Platform_`;
             </div>
             <div className="text-xs text-muted-foreground text-right flex-shrink-0">
                 <p>{alert.location || "Not specified"}</p>
-                <p>
-                    {formatDistanceToNow(createdAtDate, {
-                    addSuffix: true,
-                    })}
-                </p>
+                {createdAtDate && (
+                    <p>
+                        {formatDistanceToNow(createdAtDate, {
+                        addSuffix: true,
+                        })}
+                    </p>
+                )}
             </div>
         </div>
       </CardHeader>
