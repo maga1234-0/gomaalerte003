@@ -21,6 +21,7 @@ export default function LoginPage() {
   const { isAuthenticated, isAuthLoading } = useAuth();
   const router = useRouter();
   const [url, setUrl] = useState('');
+  const [isLocalhost, setIsLocalhost] = useState(false);
 
   useEffect(() => {
     if (!isAuthLoading && isAuthenticated) {
@@ -31,6 +32,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setUrl(window.location.href);
+      setIsLocalhost(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
     }
   }, []);
 
@@ -44,7 +46,7 @@ export default function LoginPage() {
 
   return (
     <div className="container mx-auto flex items-center justify-center py-12">
-      <Card className="w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300">
+      <Card className={cn("w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300")}>
         <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
           <CardTitle className="font-headline text-2xl">Login</CardTitle>
           <CardDescription>
@@ -68,6 +70,11 @@ export default function LoginPage() {
             </div>
           ) : (
             <Skeleton className="h-36 w-36" />
+          )}
+          {isLocalhost && (
+            <p className="text-xs text-muted-foreground text-center max-w-xs">
+              Note: This QR code may not work on your phone if you are running the app on localhost. It will work correctly when the app is deployed to a public website.
+            </p>
           )}
         </CardFooter>
       </Card>
