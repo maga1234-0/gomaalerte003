@@ -114,6 +114,13 @@ _Shared from Goma Alert Platform_`;
       </CardHeader>
       <CardContent>
         <p className="text-foreground/80">{alert.description}</p>
+        {alert.audioUrl && (
+          <div className="mt-4">
+            <audio controls src={alert.audioUrl} className="w-full">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="flex justify-end">
         <Button variant="ghost" size="sm" onClick={handleShare}>

@@ -28,6 +28,7 @@ import { ALERT_CATEGORIES, GOMA_NEIGHBORHOODS } from "@/lib/constants";
 import React from "react";
 import { useFirestore, useUser, addDocumentNonBlocking } from "@/firebase";
 import { collection, serverTimestamp } from "firebase/firestore";
+import { Mic, Square } from "lucide-react";
 
 const reportFormSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
@@ -47,6 +48,9 @@ export function ReportForm() {
   const { user } = useUser();
   const firestore = useFirestore();
 
+  const [isRecording, setIsRecording] = React.useState(false);
+  const [audioDataUri, setAudioDataUri] = React.useState<string | null>(null);
+  const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
 
   const form = useForm<ReportFormValues>({
     resolver: zodResolver(reportFormSchema),
@@ -55,6 +59,57 @@ export function ReportForm() {
       description: "",
     },
   });
+
+  const handleStartRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = recorder;
+      
+      const audioChunks: Blob[] = [];
+      recorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+  
+      recorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = () => {
+          const base64data = reader.result as string;
+          setAudioDataUri(base64data);
+        };
+        // Stop all tracks to release microphone
+        stream.getTracks().forEach(track => track.stop());
+      };
+  
+      recorder.start();
+      setIsRecording(true);
+      setAudioDataUri(null);
+      toast({
+        title: "Recording Started",
+        description: "Click stop when you are finished.",
+      });
+    } catch (err) {
+      console.error("Failed to start recording", err);
+      toast({
+        variant: "destructive",
+        title: "Recording Failed",
+        description: "Could not access microphone. Please check your browser permissions.",
+      });
+    }
+  };
+  
+  const handleStopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      toast({
+        title: "Recording Stopped",
+        description: "Your audio has been captured.",
+      });
+    }
+  };
 
   async function onSubmit(data: ReportFormValues) {
     if (!user || !firestore) {
@@ -74,6 +129,7 @@ export function ReportForm() {
         userId: user.uid,
         status: 'verified', // All reports are automatically verified
         createdAt: serverTimestamp(),
+        audioUrl: audioDataUri,
       });
       
       toast({
@@ -168,6 +224,39 @@ export function ReportForm() {
           />
         </div>
         
+        <div className="space-y-2">
+            <FormLabel>Vocal Report (Optional)</FormLabel>
+            <div className="flex items-center gap-4 rounded-lg border p-4">
+                <div className="flex-grow">
+                    <p className="text-sm text-muted-foreground">
+                        {isRecording
+                        ? "Recording in progress..."
+                        : audioDataUri
+                        ? "Recording saved. You can record a new one."
+                        : "Press record to start your vocal report."}
+                    </p>
+                </div>
+                {!isRecording ? (
+                <Button type="button" onClick={handleStartRecording} disabled={isPending}>
+                    <Mic className="mr-2 h-4 w-4" /> Start Recording
+                </Button>
+                ) : (
+                <Button type="button" onClick={handleStopRecording} variant="destructive">
+                    <Square className="mr-2 h-4 w-4" /> Stop Recording
+                </Button>
+                )}
+            </div>
+            {audioDataUri && (
+                <div className="mt-2 space-y-2">
+                    <p className="text-sm font-medium text-muted-foreground">Recording preview:</p>
+                    <audio src={audioDataUri} controls className="w-full" />
+                    <Button variant="link" size="sm" className="p-0 h-auto text-destructive" onClick={() => setAudioDataUri(null)}>
+                        Delete recording
+                    </Button>
+                </div>
+            )}
+        </div>
+
         <Button type="submit" disabled={isPending || !user}>
           {isPending ? "Submitting..." : "Submit Report"}
         </Button>

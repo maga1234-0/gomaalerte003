@@ -38,6 +38,11 @@
         "userId": {
           "type": "string",
           "description": "The ID of the user who submitted the alert."
+        },
+        "audioUrl": {
+          "type": "string",
+          "description": "A data URI of the recorded audio report.",
+          "format": "uri"
         }
       },
       "required": [

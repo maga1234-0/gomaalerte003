@@ -10,4 +10,5 @@ export type Alert = {
   status: AlertStatus;
   userId: string;
   createdAt: Date;
+  audioUrl?: string;
 };
