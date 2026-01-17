@@ -5,19 +5,22 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import QRCode from "react-qr-code";
 
 export default function LoginPage() {
   const { isAuthenticated, isAuthLoading } = useAuth();
   const router = useRouter();
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     if (!isAuthLoading && isAuthenticated) {
@@ -25,10 +28,16 @@ export default function LoginPage() {
     }
   }, [isAuthLoading, isAuthenticated, router]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setUrl(window.location.href);
+    }
+  }, []);
+
   if (isAuthLoading || isAuthenticated) {
     return (
         <div className="container mx-auto flex items-center justify-center py-12">
-            <Skeleton className="h-96 w-full max-w-md" />
+            <Skeleton className="h-[550px] w-full max-w-md" />
         </div>
     );
   }
@@ -51,6 +60,16 @@ export default function LoginPage() {
             </Link>
           </p>
         </CardContent>
+        <CardFooter className="flex flex-col items-center justify-center gap-4 pt-6 border-t animate-in fade-in-0 slide-in-from-bottom-5 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
+          <p className="text-sm text-muted-foreground">Or sign in on another device</p>
+          {url ? (
+            <div className="p-2 bg-white rounded-md">
+              <QRCode value={url} size={128} fgColor="#000000" bgColor="#ffffff" />
+            </div>
+          ) : (
+            <Skeleton className="h-36 w-36" />
+          )}
+        </CardFooter>
       </Card>
     </div>
   );
