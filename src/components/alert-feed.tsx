@@ -1,18 +1,9 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
-import type { Alert, AlertCategory } from "@/lib/types";
+import type { Alert } from "@/lib/types";
 import { AlertCard } from "./alert-card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { GOMA_NEIGHBORHOODS, ALERT_CATEGORIES } from "@/lib/constants";
-import { Button } from "./ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 interface AlertFeedProps {
@@ -23,10 +14,6 @@ const HIDDEN_ALERTS_STORAGE_KEY = 'goma-alert-hidden-alerts';
 
 export function AlertFeed({ initialAlerts }: AlertFeedProps) {
   const [hiddenAlerts, setHiddenAlerts] = useState<string[]>([]);
-  const [categoryFilter, setCategoryFilter] = useState<AlertCategory | "all">(
-    "all"
-  );
-  const [locationFilter, setLocationFilter] = useState<string>("all");
   const { toast } = useToast();
   const prevAlertsRef = useRef<Alert[]>(initialAlerts);
 
@@ -64,22 +51,8 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
   const filteredAlerts = useMemo(() => {
     return initialAlerts
       .filter(alert => !hiddenAlerts.includes(alert.id))
-      .filter((alert) => {
-        const categoryMatch =
-          categoryFilter === "all" || alert.category === categoryFilter;
-        const locationMatch =
-          locationFilter === "all" || alert.location === locationFilter;
-        return categoryMatch && locationMatch;
-      });
-  }, [initialAlerts, categoryFilter, locationFilter, hiddenAlerts]);
+  }, [initialAlerts, hiddenAlerts]);
   
-  const uniqueLocations = [...GOMA_NEIGHBORHOODS];
-
-  const handleClearFilters = () => {
-    setCategoryFilter("all");
-    setLocationFilter("all");
-  };
-
   const handleHideAlert = (alertId: string) => {
     const newHiddenAlerts = [...hiddenAlerts, alertId];
     setHiddenAlerts(newHiddenAlerts);
@@ -96,37 +69,6 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
         <h1 className="text-3xl font-bold font-headline text-primary text-center md:text-left">
           ALL alerts
         </h1>
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Select
-            value={categoryFilter}
-            onValueChange={(value) => setCategoryFilter(value as any)}
-          >
-            <SelectTrigger className="w-full sm:w-[180px] bg-card">
-              <SelectValue placeholder="Filter by category" />
-            </SelectTrigger>
-            <SelectContent>
-              {ALERT_CATEGORIES.map(cat => (
-                <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select
-            value={locationFilter}
-            onValueChange={(value) => setLocationFilter(value)}
-          >
-            <SelectTrigger className="w-full sm:w-[180px] bg-card">
-              <SelectValue placeholder="Filter by location" />
-            </SelectTrigger>
-            <SelectContent>
-              {uniqueLocations.map((loc) => (
-                <SelectItem key={loc} value={loc}>
-                  {loc}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button variant="ghost" onClick={handleClearFilters} className="w-full sm:w-auto">Clear</Button>
-        </div>
       </div>
 
       {filteredAlerts.length > 0 ? (
@@ -140,7 +82,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
           <CardContent className="pt-6">
             <div className="text-center text-muted-foreground">
               <p className="text-lg font-semibold">No alerts found.</p>
-              <p>There are no verified alerts matching your criteria at this time.</p>
+              <p>There are no verified alerts at this time.</p>
             </div>
           </CardContent>
         </Card>
