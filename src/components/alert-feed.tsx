@@ -73,7 +73,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
       });
   }, [initialAlerts, categoryFilter, locationFilter, hiddenAlerts]);
   
-  const uniqueLocations = ["all", ...GOMA_NEIGHBORHOODS];
+  const uniqueLocations = [...GOMA_NEIGHBORHOODS];
 
   const handleClearFilters = () => {
     setCategoryFilter("all");
@@ -105,7 +105,6 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
               <SelectValue placeholder="Filter by category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
               {ALERT_CATEGORIES.map(cat => (
                 <SelectItem key={cat} value={cat}>{cat}</SelectItem>
               ))}
@@ -121,7 +120,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
             <SelectContent>
               {uniqueLocations.map((loc) => (
                 <SelectItem key={loc} value={loc}>
-                  {loc === "all" ? "All Locations" : loc}
+                  {loc}
                 </SelectItem>
               ))}
             </SelectContent>
