@@ -4,10 +4,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useAuth as useFirebaseAuth } from "@/firebase";
+import { useAuth as useFirebaseAuth, useFirestore, setDocumentNonBlocking } from "@/firebase";
 import { initiateEmailSignUp } from "@/firebase/non-blocking-login";
 import React from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { doc, serverTimestamp } from "firebase/firestore";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,6 +34,7 @@ export function SignupForm() {
   const { toast } = useToast();
   const [isPending, startTransition] = React.useTransition();
   const auth = useFirebaseAuth();
+  const firestore = useFirestore();
   const [showPassword, setShowPassword] = React.useState(false);
 
   const form = useForm<SignupFormValues>({
@@ -44,9 +46,20 @@ export function SignupForm() {
   });
 
   async function onSubmit(data: SignupFormValues) {
+    if (!firestore) return;
+
     startTransition(() => {
       initiateEmailSignUp(auth, data.email, data.password)
-        .then(() => {
+        .then((userCredential) => {
+          if (userCredential.user) {
+            const userRef = doc(firestore, 'users', userCredential.user.uid);
+            const userData = {
+              uid: userCredential.user.uid,
+              email: userCredential.user.email,
+              createdAt: serverTimestamp(),
+            };
+            setDocumentNonBlocking(userRef, userData, {});
+          }
           toast({
             title: "Account Created",
             description: "You will be redirected shortly.",

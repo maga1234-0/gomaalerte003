@@ -22,5 +22,19 @@ service cloud.firestore {
       // The `resource` variable refers to the document being deleted.
       allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
     }
+
+    match /users/{userId} {
+      // For this prototype, any signed-in user can see the list of all users.
+      // In a production app, this should be restricted to admin roles.
+      allow list: if isSignedIn();
+
+      // A user can read, create, or update their own profile.
+      allow get: if isSignedIn() && request.auth.uid == userId;
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isSignedIn() && request.auth.uid == userId;
+
+      // Users cannot delete their profiles from the client.
+      allow delete: if false;
+    }
   }
 }

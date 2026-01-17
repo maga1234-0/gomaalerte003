@@ -9,6 +9,12 @@ export type Alert = {
   location?: string;
   status: AlertStatus;
   userId: string;
-  createdAt: Date;
+  createdAt: any;
   audioUrl?: string;
+};
+
+export type UserProfile = {
+  id: string;
+  email: string;
+  createdAt: any; // Firestore Timestamp
 };
