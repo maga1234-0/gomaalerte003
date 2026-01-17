@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -211,10 +212,12 @@ _Shared from Goma Alert Platform_`;
         )}
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button variant="ghost" size="sm" onClick={handleShare}>
-          <Share2 className="mr-2 h-4 w-4" />
-          Share via WhatsApp
-        </Button>
+        {!alert.audioUrl && (
+          <Button variant="ghost" size="sm" onClick={handleShare}>
+            <Share2 className="mr-2 h-4 w-4" />
+            Share via WhatsApp
+          </Button>
+        )}
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-9 w-9">
