@@ -1,0 +1,109 @@
+/**
+ * Core Philosophy: This ruleset provides a public-read model for alerts,
+ * allowing any user (including anonymous) to submit new alerts, while
+ * reserving all management (verification, archival) for administrators.
+ * It follows a Query According to Permissions (QAP) model, where clients
+ * are expected to query for the data they are allowed to see (e.g., only
+ * 'verified' alerts for the public). Administrator access is strictly
+ * controlled and cannot be modified from the client.
+ *
+ * Data Structure: The data is organized into two top-level collections:
+ * - /alerts: A public collection of all user-submitted alerts.
+ * - /admin_users: A private collection defining administrator roles.
+ *
+ * Key Security Decisions:
+ * - Public Read on Alerts: All alerts are readable by anyone to allow clients
+ *   to query and display verified public safety information.
+ * - Open Submission: Any authenticated session (including anonymous users) can
+ *   create a new alert, fostering broad community participation.
+ * - Admin-Only Management: The lifecycle of an alert (updating its status from
+ *   'pending' to 'verified' or 'archived') is controlled exclusively by users
+ *   defined in the /admin_users collection.
+ * - No Client-Side Admin Management: It is impossible to create, edit, or
+ *   delete admin users from the client. This prevents privilege escalation and
+ *   must be handled by a trusted server environment (e.g., Cloud Functions).
+ *
+ * Denormalization for Authorization: The rules rely on the existence of an
+ * /admin_users/{userId} document to grant administrative privileges. This avoids
+ * needing to inspect custom claims or other complex data, making the isAdmin()
+ * check fast and simple.
+ *
+ * Structural Segregation: Public alert data (/alerts) is kept entirely separate
+ * from sensitive administrative data (/admin_users), ensuring that security
+ * rules for one do not inadvertently expose the other.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ------------------------------------------------------------------------
+    // Helper Functions
+    // ------------------------------------------------------------------------
+
+    /**
+     * Checks if a user is authenticated, including anonymous users.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the requesting user is an administrator by verifying the
+     * existence of their user document in the admin_users collection.
+     */
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/admin_users/$(request.auth.uid));
+    }
+
+    // ------------------------------------------------------------------------
+    // Collection Rules
+    // ------------------------------------------------------------------------
+
+    /**
+     * @description Collection of all user-submitted alerts.
+     * @path /alerts/{alertId}
+     * @allow (get) Any user, signed in or not, can retrieve a specific alert.
+     * @allow (list) Any user, signed in or not, can list alerts (e.g., to query for verified ones).
+     * @allow (create) An authenticated user (including anonymous) can create a new alert.
+     * @deny (update) A non-admin user cannot update an alert's status.
+     * @deny (delete) A regular user cannot delete an alert.
+     * @principle Implements a "Public Read with Controlled Writes" pattern. Data is open for consumption, but modification is restricted to privileged roles.
+     */
+    match /alerts/{alertId} {
+      // READ: Publicly readable by anyone.
+      // This allows clients to query for and display verified alerts.
+      allow get: if true;
+      allow list: if true;
+
+      // CREATE: Any signed-in user (including anonymous) can create an alert.
+      // No data validation is performed in prototyping mode, aside from authentication.
+      allow create: if isSignedIn();
+
+      // UPDATE & DELETE: Restricted to administrators.
+      // Requires the document to exist before modification.
+      allow update: if isAdmin() && resource != null;
+      allow delete: if isAdmin() && resource != null;
+    }
+
+    /**
+     * @description Stores administrator profiles and roles. This collection governs who has administrative privileges across the app.
+     * @path /admin_users/{adminUserId}
+     * @allow (get) An admin can read the profile of another admin.
+     * @deny (list) Listing all admins is disabled to prevent user enumeration.
+     * @deny (get) A non-admin user cannot read an admin's profile.
+     * @deny (create, update, delete) All write operations are disabled from the client to prevent privilege escalation. Admins must be managed via a secure backend process.
+     * @principle Enforces strict role-based access control for sensitive administrative data and prevents client-side privilege escalation.
+     */
+    match /admin_users/{adminUserId} {
+      // READ: Admins can look up other admin profiles, but cannot list the entire collection.
+      allow get: if isAdmin();
+      allow list: if false;
+
+      // WRITE: All client-side writes are forbidden to prevent privilege escalation.
+      // Admin roles must be assigned through a trusted server-side environment.
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}
