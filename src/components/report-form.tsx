@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -53,6 +54,14 @@ export function ReportForm() {
   const [isPending, startTransition] = React.useTransition();
   const { user } = useUser();
   const firestore = useFirestore();
+
+  const form = useForm<ReportFormValues>({
+    resolver: zodResolver(reportFormSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+    },
+  });
 
   const [isRecording, setIsRecording] = React.useState(false);
   const [audioDataUri, setAudioDataUri] = React.useState<string | null>(null);
