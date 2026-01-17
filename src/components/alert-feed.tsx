@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import type { Alert, AlertCategory } from "@/lib/types";
 import { AlertCard } from "./alert-card";
 import {
@@ -13,6 +13,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { GOMA_NEIGHBORHOODS, ALERT_CATEGORIES } from "@/lib/constants";
 import { Button } from "./ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 interface AlertFeedProps {
   initialAlerts: Alert[];
@@ -21,12 +22,13 @@ interface AlertFeedProps {
 const HIDDEN_ALERTS_STORAGE_KEY = 'goma-alert-hidden-alerts';
 
 export function AlertFeed({ initialAlerts }: AlertFeedProps) {
-  const [alerts, setAlerts] = useState<Alert[]>(initialAlerts);
   const [hiddenAlerts, setHiddenAlerts] = useState<string[]>([]);
   const [categoryFilter, setCategoryFilter] = useState<AlertCategory | "all">(
     "all"
   );
   const [locationFilter, setLocationFilter] = useState<string>("all");
+  const { toast } = useToast();
+  const prevAlertsRef = useRef<Alert[]>(initialAlerts);
 
   useEffect(() => {
     try {
@@ -40,11 +42,27 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
   }, []);
 
   useEffect(() => {
-    setAlerts(initialAlerts);
-  }, [initialAlerts]);
+    // This effect handles showing notifications for new alerts.
+    // It compares the current alerts with the previous set of alerts.
+    // A notification is shown only if a new alert has been added since the last render,
+    // and it is not the initial load of data.
+    if (initialAlerts.length > prevAlertsRef.current.length && prevAlertsRef.current.length > 0) {
+      const oldAlertIds = new Set(prevAlertsRef.current.map(a => a.id));
+      const newAlert = initialAlerts.find(a => !oldAlertIds.has(a.id));
+      
+      if (newAlert) {
+        toast({
+          title: "New Alert Published",
+          description: newAlert.title || "Check the feed for the latest update.",
+        });
+      }
+    }
+    // Update the ref to the current alerts for the next render cycle.
+    prevAlertsRef.current = initialAlerts;
+  }, [initialAlerts, toast]);
 
   const filteredAlerts = useMemo(() => {
-    return alerts
+    return initialAlerts
       .filter(alert => !hiddenAlerts.includes(alert.id))
       .filter((alert) => {
         const categoryMatch =
@@ -53,7 +71,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
           locationFilter === "all" || alert.location === locationFilter;
         return categoryMatch && locationMatch;
       });
-  }, [alerts, categoryFilter, locationFilter, hiddenAlerts]);
+  }, [initialAlerts, categoryFilter, locationFilter, hiddenAlerts]);
   
   const uniqueLocations = ["all", ...GOMA_NEIGHBORHOODS];
 
