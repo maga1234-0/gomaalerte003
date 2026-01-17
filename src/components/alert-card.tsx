@@ -111,7 +111,18 @@ _Shared from Goma Alert Platform_`;
       try {
         const response = await fetch(alert.audioUrl);
         const blob = await response.blob();
-        const file = new File([blob], `goma-alert-${alert.id}.webm`, { type: blob.type || 'audio/webm' });
+        
+        // Determine file extension from MIME type for better compatibility
+        const getFileExtension = (mimeType: string) => {
+          if (!mimeType) return 'audio';
+          if (mimeType.includes('mp4')) return 'mp4';
+          if (mimeType.includes('webm')) return 'webm';
+          if (mimeType.includes('ogg')) return 'ogg';
+          return 'audio'; // Fallback
+        };
+        const extension = getFileExtension(blob.type);
+        
+        const file = new File([blob], `goma-alert-${alert.id}.${extension}`, { type: blob.type });
 
         const shareData = {
           title,
@@ -119,7 +130,7 @@ _Shared from Goma Alert Platform_`;
           files: [file],
         };
 
-        // Try sharing and fall back if it fails.
+        // Try sharing. If it fails (e.g., file sharing not supported), it will be caught.
         await navigator.share(shareData);
         return; // If share is successful, we're done.
       } catch (error) {

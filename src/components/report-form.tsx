@@ -61,7 +61,25 @@ export function ReportForm() {
   const handleStartRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
+      
+      const mimeTypes = [
+        'audio/mp4',
+        'audio/webm;codecs=opus',
+        'audio/ogg;codecs=opus',
+        'audio/webm',
+      ];
+      const supportedMimeType = mimeTypes.find(type => MediaRecorder.isTypeSupported(type));
+      
+      if (!supportedMimeType) {
+        toast({
+            variant: "destructive",
+            title: "Recording not supported",
+            description: "Your browser doesn't support the required audio formats.",
+        });
+        return;
+      }
+
+      const recorder = new MediaRecorder(stream, { mimeType: supportedMimeType });
       mediaRecorderRef.current = recorder;
       
       const audioChunks: Blob[] = [];
@@ -70,7 +88,7 @@ export function ReportForm() {
       };
   
       recorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunks, { type: recorder.mimeType });
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
         reader.onloadend = () => {
