@@ -29,6 +29,14 @@ import React from "react";
 import { useFirestore, useUser, addDocumentNonBlocking } from "@/firebase";
 import { collection, serverTimestamp } from "firebase/firestore";
 import { Mic, Square } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const reportFormSchema = z.object({
   title: z.string().optional(),
@@ -49,14 +57,7 @@ export function ReportForm() {
   const [isRecording, setIsRecording] = React.useState(false);
   const [audioDataUri, setAudioDataUri] = React.useState<string | null>(null);
   const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
-
-  const form = useForm<ReportFormValues>({
-    resolver: zodResolver(reportFormSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-    },
-  });
+  const [isRecordingDialogOpen, setIsRecordingDialogOpen] = React.useState(false);
 
   const handleStartRecording = async () => {
     try {
@@ -76,6 +77,7 @@ export function ReportForm() {
             title: "Recording not supported",
             description: "Your browser doesn't support the required audio formats.",
         });
+        setIsRecordingDialogOpen(false);
         return;
       }
 
@@ -88,6 +90,11 @@ export function ReportForm() {
       };
   
       recorder.onstop = () => {
+        // If there are no chunks, it means recording was cancelled, so just stop the stream.
+        if (audioChunks.length === 0) {
+          stream.getTracks().forEach(track => track.stop());
+          return;
+        }
         const audioBlob = new Blob(audioChunks, { type: recorder.mimeType });
         const reader = new FileReader();
         reader.readAsDataURL(audioBlob);
@@ -101,10 +108,9 @@ export function ReportForm() {
   
       recorder.start();
       setIsRecording(true);
-      setAudioDataUri(null);
+      setAudioDataUri(null); // Clear previous recording
       toast({
         title: "Recording Started",
-        description: "Click stop when you are finished.",
       });
     } catch (err) {
       console.error("Failed to start recording", err);
@@ -113,19 +119,41 @@ export function ReportForm() {
         title: "Recording Failed",
         description: "Could not access microphone. Please check your browser permissions.",
       });
+      setIsRecordingDialogOpen(false);
     }
   };
-  
+
   const handleStopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
+      setIsRecordingDialogOpen(false);
       toast({
-        title: "Recording Stopped",
-        description: "Your audio has been captured.",
+        title: "Recording Saved",
+        description: "Your audio has been captured for preview.",
       });
     }
   };
+
+  const onDialogChange = (open: boolean) => {
+    if (open) {
+      setIsRecordingDialogOpen(true);
+    } else {
+      // Dialog is closing. If we are recording, it's a cancellation.
+      if (mediaRecorderRef.current && isRecording) {
+          mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop()); // Stop mic access
+          setIsRecording(false);
+          toast({ title: "Recording Canceled" });
+      }
+      setIsRecordingDialogOpen(false);
+    }
+  }
+
+  React.useEffect(() => {
+      if (isRecordingDialogOpen) {
+          handleStartRecording();
+      }
+  }, [isRecordingDialogOpen]);
 
   async function onSubmit(data: ReportFormValues) {
     if (!user || !firestore) {
@@ -254,35 +282,60 @@ export function ReportForm() {
         
         <div className="space-y-2 animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
             <FormLabel>Vocal Report (Optional)</FormLabel>
-            <div className="flex flex-col sm:flex-row items-center gap-4 rounded-lg border p-4">
-                <div className="flex-grow w-full">
-                    <p className="text-sm text-muted-foreground">
-                        {isRecording
-                        ? "Recording in progress..."
-                        : audioDataUri
-                        ? "Recording saved. You can record a new one."
-                        : "Press record to start your vocal report."}
-                    </p>
+            <div className="rounded-lg border p-4 space-y-4">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="flex-grow w-full">
+                        <p className="text-sm text-muted-foreground">
+                            {audioDataUri
+                            ? "A vocal report is saved. You can record a new one or delete the existing one."
+                            : "Press record to start your vocal report."}
+                        </p>
+                    </div>
+                    
+                    <Dialog open={isRecordingDialogOpen} onOpenChange={onDialogChange}>
+                        <DialogTrigger asChild>
+                            <Button type="button" disabled={isPending} className="w-full sm:w-auto flex-shrink-0">
+                                <Mic className="mr-2 h-4 w-4" /> 
+                                {audioDataUri ? 'Record Again' : 'Start Recording'}
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle className="text-center">Recording Vocal Report</DialogTitle>
+                                <DialogDescription className="text-center">
+                                    Speak clearly. Click stop when you are finished.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex flex-col items-center justify-center gap-4 py-8">
+                                <div className="relative h-24 w-24">
+                                    <Mic className="h-24 w-24 text-primary" />
+                                    {isRecording && (
+                                        <div className="absolute inset-0 -z-10 flex items-center justify-center">
+                                            <div className="h-24 w-24 rounded-full bg-primary/20 animate-pulse"></div>
+                                        </div>
+                                    )}
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                    {isRecording ? "Recording..." : "Getting ready..."}
+                                </p>
+                            </div>
+                            <Button type="button" onClick={handleStopRecording} variant="destructive" className="w-full" disabled={!isRecording}>
+                                <Square className="mr-2 h-4 w-4" /> Stop Recording
+                            </Button>
+                        </DialogContent>
+                    </Dialog>
                 </div>
-                {!isRecording ? (
-                <Button type="button" onClick={handleStartRecording} disabled={isPending} className="w-full sm:w-auto flex-shrink-0">
-                    <Mic className="mr-2 h-4 w-4" /> Start Recording
-                </Button>
-                ) : (
-                <Button type="button" onClick={handleStopRecording} variant="destructive" className="w-full sm:w-auto flex-shrink-0">
-                    <Square className="mr-2 h-4 w-4" /> Stop Recording
-                </Button>
+                
+                {audioDataUri && (
+                    <div className="space-y-2 pt-4 border-t">
+                        <p className="text-sm font-medium text-muted-foreground">Recording preview:</p>
+                        <audio src={audioDataUri} controls className="w-full" />
+                        <Button variant="link" size="sm" className="p-0 h-auto text-destructive" onClick={() => setAudioDataUri(null)}>
+                            Delete recording
+                        </Button>
+                    </div>
                 )}
             </div>
-            {audioDataUri && (
-                <div className="mt-2 space-y-2">
-                    <p className="text-sm font-medium text-muted-foreground">Recording preview:</p>
-                    <audio src={audioDataUri} controls className="w-full" />
-                    <Button variant="link" size="sm" className="p-0 h-auto text-destructive" onClick={() => setAudioDataUri(null)}>
-                        Delete recording
-                    </Button>
-                </div>
-            )}
         </div>
 
         <Button type="submit" disabled={isPending || !user} className="animate-in fade-in-0 zoom-in-95 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
