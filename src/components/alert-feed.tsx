@@ -132,8 +132,8 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
 
       {filteredAlerts.length > 0 ? (
         <div className="grid gap-4">
-          {filteredAlerts.map((alert) => (
-            <AlertCard key={alert.id} alert={alert} onHide={handleHideAlert} />
+          {filteredAlerts.map((alert, index) => (
+            <AlertCard key={alert.id} alert={alert} onHide={handleHideAlert} index={index} />
           ))}
         </div>
       ) : (

@@ -175,7 +175,7 @@ export function ReportForm() {
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
               <FormLabel>Title (Optional)</FormLabel>
               <FormControl>
                 <Input placeholder="e.g., Power Outage in Mabanga" {...field} />
@@ -188,7 +188,7 @@ export function ReportForm() {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}>
               <FormLabel>Description (Optional)</FormLabel>
               <FormControl>
                 <Textarea
@@ -206,7 +206,7 @@ export function ReportForm() {
             control={form.control}
             name="category"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
                 <FormLabel>Category (Optional)</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
@@ -230,7 +230,7 @@ export function ReportForm() {
             control={form.control}
             name="location"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '450ms', animationFillMode: 'backwards' }}>
                 <FormLabel>Location (Optional)</FormLabel>
                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
@@ -252,7 +252,7 @@ export function ReportForm() {
           />
         </div>
         
-        <div className="space-y-2">
+        <div className="space-y-2 animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
             <FormLabel>Vocal Report (Optional)</FormLabel>
             <div className="flex flex-col sm:flex-row items-center gap-4 rounded-lg border p-4">
                 <div className="flex-grow w-full">
@@ -285,7 +285,7 @@ export function ReportForm() {
             )}
         </div>
 
-        <Button type="submit" disabled={isPending || !user}>
+        <Button type="submit" disabled={isPending || !user} className="animate-in fade-in-0 zoom-in-95 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
           {isPending ? "Submitting..." : "Submit Report"}
         </Button>
       </form>

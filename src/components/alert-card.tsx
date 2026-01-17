@@ -48,6 +48,7 @@ import { useToast } from "@/hooks/use-toast";
 interface AlertCardProps {
   alert: Alert;
   onHide: (alertId: string) => void;
+  index?: number;
 }
 
 const categoryThemes: Record<
@@ -90,7 +91,7 @@ const categoryThemes: Record<
   },
 };
 
-export function AlertCard({ alert, onHide }: AlertCardProps) {
+export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
@@ -181,7 +182,17 @@ _Shared from Goma Alert Platform_`;
   const createdAtDate = getCreatedAtDate();
 
   return (
-    <Card className={cn("overflow-hidden border-l-4 shadow-sm transition-all duration-200 hover:shadow-lg hover:scale-[1.01]", colorClasses)}>
+    <Card
+      className={cn(
+        "overflow-hidden border-l-4 shadow-sm transition-all duration-300 hover:shadow-lg hover:scale-[1.01]",
+        "animate-in fade-in-0 slide-in-from-top-5 duration-500",
+        colorClasses
+      )}
+      style={{
+        animationDelay: `${index * 75}ms`,
+        animationFillMode: "backwards",
+      }}
+    >
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
             <div className="flex-grow order-2 sm:order-1">

@@ -34,8 +34,8 @@ export default function SignupPage() {
 
   return (
     <div className="container mx-auto flex items-center justify-center py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
+      <Card className="w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300">
+        <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
           <CardTitle className="font-headline text-2xl">Create an Account</CardTitle>
           <CardDescription>
             Enter your email and password to sign up.
@@ -43,7 +43,7 @@ export default function SignupPage() {
         </CardHeader>
         <CardContent>
           <SignupForm />
-          <p className="mt-4 text-center text-sm text-muted-foreground">
+          <p className="mt-4 text-center text-sm text-muted-foreground animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
             Already have an account?{' '}
             <Link href="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
               Login

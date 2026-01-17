@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
   const { isAuthenticated, isAuthLoading } = useAuth();
@@ -34,8 +35,8 @@ export default function LoginPage() {
 
   return (
     <div className="container mx-auto flex items-center justify-center py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
+      <Card className="w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300">
+        <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
           <CardTitle className="font-headline text-2xl">Login</CardTitle>
           <CardDescription>
             Enter your credentials to access the platform.
@@ -43,7 +44,7 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <LoginForm />
-          <p className="mt-4 text-center text-sm text-muted-foreground">
+          <p className="mt-4 text-center text-sm text-muted-foreground animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
             Don&apos;t have an account?{' '}
             <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline">
               Sign Up
