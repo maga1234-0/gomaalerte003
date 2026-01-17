@@ -30,10 +30,6 @@
           "type": "string",
           "description": "Status of the alert (pending, verified, archived)."
         },
-        "isAnonymous": {
-          "type": "boolean",
-          "description": "Indicates if the alert was submitted anonymously."
-        },
         "createdAt": {
           "type": "string",
           "description": "Timestamp of when the alert was created.",
@@ -47,6 +43,10 @@
         "verifiedBy": {
           "type": "string",
           "description": "Reference to AdminUser who verified the alert. (Relationship: AdminUser 1:N Alert)"
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who submitted the alert."
         }
       },
       "required": [
@@ -56,8 +56,8 @@
         "category",
         "location",
         "status",
-        "isAnonymous",
-        "createdAt"
+        "createdAt",
+        "userId"
       ]
     },
     "AdminUser": {
@@ -94,8 +94,7 @@
   },
   "auth": {
     "providers": [
-      "password",
-      "anonymous"
+      "emailPassword"
     ]
   },
   "firestore": {
@@ -107,7 +106,7 @@
           "schema": {
             "$ref": "#/backend/entities/Alert"
           },
-          "description": "Collection of alerts. Includes fields like title, description, category, location, status, isAnonymous, createdAt, verifiedAt, and verifiedBy.  The 'verifiedBy' field contains the AdminUser ID, enabling direct authorization checks.",
+          "description": "Collection of alerts. Includes fields like title, description, category, location, status, createdAt, verifiedAt, and verifiedBy. The 'verifiedBy' field contains the AdminUser ID, enabling direct authorization checks. The 'userId' field contains the UID of the user who created the alert.",
           "params": [
             {
               "name": "alertId",
@@ -132,7 +131,6 @@
           ]
         }
       }
-    ],
-    "reasoning": "The Firestore structure prioritizes authorization independence and QAPs (Query According to Permissions). It separates public and admin data, using path-based ownership for user-submitted alerts and a dedicated collection for admin roles. The `Alert` documents include a `verifiedBy` field which explicitly represents the AdminUser that verifies an alert. The structure uses structural segregation, separating public alerts (available to all) from the potential drafts or admin-only data related to alerts. This avoids mixing data with different access needs in the same collection. By avoiding complex hierarchical authorization, the design enables more straightforward and auditable security rules. This structure also supports QAPs by allowing listing of only 'verified' alerts for public users, and all alerts for admin users, without using rules as filters."
+    ]
   }
 }

@@ -14,7 +14,7 @@ const reportSchema = z.object({
   description: z.string().min(10, 'Description must be at least 10 characters'),
   category: z.enum(['Security', 'Road', 'Power', 'Water', 'Health', 'Other']),
   location: z.string().min(3, 'Location is required'),
-  isAnonymous: z.boolean(),
+  userId: z.string(),
 });
 
 export async function getVerifiedAlerts() {
@@ -37,12 +37,13 @@ export async function submitReport(formData: FormData) {
     description: data.description,
     category: data.category,
     location: data.location,
-    isAnonymous: data.isAnonymous === 'on',
+    userId: data.userId,
   });
 
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
+      error: 'Validation failed'
     };
   }
 

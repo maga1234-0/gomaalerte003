@@ -4,16 +4,10 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/icons";
-import { useRouter } from "next/navigation";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function SiteHeader() {
-  const { isAdmin, login, logout } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = () => {
-    logout();
-    router.push('/');
-  }
+  const { isAdmin, isAuthLoading, login, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -29,12 +23,14 @@ export function SiteHeader() {
             <Link href="/report">
               <Button>Report an Incident</Button>
             </Link>
-            {isAdmin ? (
+            {isAuthLoading ? (
+              <Skeleton className="h-10 w-24" />
+            ) : isAdmin ? (
               <>
                 <Link href="/admin">
                   <Button variant="outline">Dashboard</Button>
                 </Link>
-                <Button onClick={handleLogout} variant="secondary">
+                <Button onClick={logout} variant="secondary">
                   Logout
                 </Button>
               </>

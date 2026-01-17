@@ -64,7 +64,7 @@ service cloud.firestore {
      * @path /alerts/{alertId}
      * @allow (get) Any user, signed in or not, can retrieve a specific alert.
      * @allow (list) Any user, signed in or not, can list alerts (e.g., to query for verified ones).
-     * @allow (create) An authenticated user (including anonymous) can create a new alert.
+     * @allow (create) An authenticated user can create a new alert, and the userId must match their own.
      * @deny (update) A non-admin user cannot update an alert's status.
      * @deny (delete) A regular user cannot delete an alert.
      * @principle Implements a "Public Read with Controlled Writes" pattern. Data is open for consumption, but modification is restricted to privileged roles.
@@ -75,9 +75,8 @@ service cloud.firestore {
       allow get: if true;
       allow list: if true;
 
-      // CREATE: Any signed-in user (including anonymous) can create an alert.
-      // No data validation is performed in prototyping mode, aside from authentication.
-      allow create: if isSignedIn();
+      // CREATE: Any signed-in user can create an alert, but they must be the owner.
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
 
       // UPDATE & DELETE: Restricted to administrators.
       // Requires the document to exist before modification.

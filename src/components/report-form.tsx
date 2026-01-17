@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,11 +23,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { ALERT_CATEGORIES, GOMA_NEIGHBORHOODS } from "@/lib/constants";
 import { submitReport } from "@/lib/actions";
 import React from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { useUser } from "@/firebase";
 
 const reportFormSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters long."),
@@ -37,7 +37,6 @@ const reportFormSchema = z.object({
     required_error: "Please select a category.",
   }),
   location: z.string({ required_error: "Please select a location." }),
-  isAnonymous: z.boolean().default(false).optional(),
 });
 
 type ReportFormValues = z.infer<typeof reportFormSchema>;
@@ -46,21 +45,34 @@ export function ReportForm() {
   const router = useRouter();
   const { toast } = useToast();
   const [isPending, startTransition] = React.useTransition();
+  const { user } = useUser();
+  const { login } = useAuth();
+
 
   const form = useForm<ReportFormValues>({
     resolver: zodResolver(reportFormSchema),
     defaultValues: {
       title: "",
       description: "",
-      isAnonymous: false,
     },
   });
 
   async function onSubmit(data: ReportFormValues) {
+    if (!user) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Required",
+            description: "You must be logged in to submit a report.",
+            action: <Button onClick={() => login()}>Login</Button>
+        });
+        return;
+    }
+
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, String(value));
     });
+    formData.append('userId', user.uid);
     
     startTransition(async () => {
       const result = await submitReport(formData);
@@ -74,7 +86,7 @@ export function ReportForm() {
         toast({
           variant: "destructive",
           title: "Submission Failed",
-          description: "There was an error submitting your report. Please try again.",
+          description: result.error || "There was an error submitting your report. Please try again.",
         });
       }
     });
@@ -163,26 +175,7 @@ export function ReportForm() {
             )}
           />
         </div>
-        <FormField
-          control={form.control}
-          name="isAnonymous"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>Submit Anonymously</FormLabel>
-                <FormDescription>
-                  If checked, your name will not be attached to this report.
-                </FormDescription>
-              </div>
-            </FormItem>
-          )}
-        />
+        
         <Button type="submit" disabled={isPending}>
           {isPending ? "Submitting..." : "Submit Report"}
         </Button>

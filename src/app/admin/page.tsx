@@ -4,9 +4,18 @@ import { AdminDashboard } from "@/components/admin/dashboard";
 import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AdminPage() {
-  const { isAdmin, login } = useAuth();
+  const { isAdmin, isAuthLoading, login } = useAuth();
+
+  if (isAuthLoading) {
+    return (
+      <div className="container mx-auto flex items-center justify-center py-12">
+        <Skeleton className="h-48 w-full max-w-md" />
+      </div>
+    );
+  }
 
   if (!isAdmin) {
     return (

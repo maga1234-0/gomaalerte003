@@ -8,7 +8,7 @@ export type Alert = {
   category: AlertCategory;
   location: string;
   status: AlertStatus;
-  isAnonymous: boolean;
+  userId: string;
   createdAt: Date;
   verifiedAt?: Date;
   verifiedBy?: string; // admin_uid

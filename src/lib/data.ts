@@ -10,7 +10,7 @@ export const mockAlerts: Alert[] = [
     category: 'Power',
     location: 'Katindo',
     status: 'verified',
-    isAnonymous: false,
+    userId: 'user1',
     createdAt: new Date(now.getTime() - 2 * 60 * 60 * 1000), // 2 hours ago
     verifiedAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
     verifiedBy: 'admin1',
@@ -22,7 +22,7 @@ export const mockAlerts: Alert[] = [
     category: 'Security',
     location: 'Mapendo',
     status: 'verified',
-    isAnonymous: true,
+    userId: 'user2',
     createdAt: new Date(now.getTime() - 5 * 60 * 60 * 1000), // 5 hours ago
     verifiedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
     verifiedBy: 'admin1',
@@ -34,7 +34,7 @@ export const mockAlerts: Alert[] = [
     category: 'Water',
     location: 'Mabanga Sud',
     status: 'verified',
-    isAnonymous: false,
+    userId: 'user1',
     createdAt: new Date(now.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
     verifiedAt: new Date(now.getTime() - 23 * 60 * 60 * 1000),
     verifiedBy: 'admin2',
@@ -46,7 +46,7 @@ export const mockAlerts: Alert[] = [
     category: 'Road',
     location: 'Virunga',
     status: 'pending',
-    isAnonymous: false,
+    userId: 'user3',
     createdAt: new Date(now.getTime() - 30 * 60 * 1000), // 30 minutes ago
   },
   {
@@ -56,7 +56,7 @@ export const mockAlerts: Alert[] = [
     category: 'Health',
     location: 'Ndosho',
     status: 'verified',
-    isAnonymous: false,
+    userId: 'user4',
     createdAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
     verifiedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000),
     verifiedBy: 'admin1',
@@ -68,7 +68,7 @@ export const mockAlerts: Alert[] = [
     category: 'Other',
     location: 'Kyeshero',
     status: 'verified',
-    isAnonymous: false,
+    userId: 'user5',
     createdAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
     verifiedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000),
     verifiedBy: 'admin2',
@@ -80,7 +80,7 @@ export const mockAlerts: Alert[] = [
     category: 'Security',
     location: 'Les Volcans',
     status: 'pending',
-    isAnonymous: true,
+    userId: 'user2',
     createdAt: new Date(now.getTime() - 1 * 60 * 60 * 1000), // 1 hour ago
   },
 ];
