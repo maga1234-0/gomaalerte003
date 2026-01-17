@@ -16,6 +16,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import QRCode from "react-qr-code";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
 
 export default function LoginPage() {
   const { isAuthenticated, isAuthLoading } = useAuth();
@@ -64,18 +66,23 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter className="flex flex-col items-center justify-center gap-4 pt-6 border-t animate-in fade-in-0 slide-in-from-bottom-5 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
           <p className="text-sm text-muted-foreground">Or sign in on another device</p>
-          {url ? (
+          
+          {isLocalhost ? (
+             <Alert>
+                <Terminal className="h-4 w-4" />
+                <AlertTitle>Developer Notice</AlertTitle>
+                <AlertDescription>
+                  The QR code is hidden during local development because it cannot be accessed from another device. It will appear automatically when your app is deployed to a public website.
+                </AlertDescription>
+              </Alert>
+          ) : url ? (
             <div className="p-2 bg-white rounded-md">
               <QRCode value={url} size={128} />
             </div>
           ) : (
             <Skeleton className="h-36 w-36" />
           )}
-          {isLocalhost && (
-            <p className="text-xs text-muted-foreground text-center max-w-xs">
-              Note: This QR code may not work on your phone if you are running the app on localhost. It will work correctly when the app is deployed to a public website.
-            </p>
-          )}
+
         </CardFooter>
       </Card>
     </div>
