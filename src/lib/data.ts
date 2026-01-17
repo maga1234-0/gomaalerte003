@@ -12,8 +12,6 @@ export const mockAlerts: Alert[] = [
     status: 'verified',
     userId: 'user1',
     createdAt: new Date(now.getTime() - 2 * 60 * 60 * 1000), // 2 hours ago
-    verifiedAt: new Date(now.getTime() - 1 * 60 * 60 * 1000),
-    verifiedBy: 'admin1',
   },
   {
     id: '2',
@@ -24,8 +22,6 @@ export const mockAlerts: Alert[] = [
     status: 'verified',
     userId: 'user2',
     createdAt: new Date(now.getTime() - 5 * 60 * 60 * 1000), // 5 hours ago
-    verifiedAt: new Date(now.getTime() - 4 * 60 * 60 * 1000),
-    verifiedBy: 'admin1',
   },
   {
     id: '3',
@@ -36,8 +32,6 @@ export const mockAlerts: Alert[] = [
     status: 'verified',
     userId: 'user1',
     createdAt: new Date(now.getTime() - 24 * 60 * 60 * 1000), // 1 day ago
-    verifiedAt: new Date(now.getTime() - 23 * 60 * 60 * 1000),
-    verifiedBy: 'admin2',
   },
   {
     id: '4',
@@ -45,7 +39,7 @@ export const mockAlerts: Alert[] = [
     description: 'A temporary roadblock has been set up by authorities for security checks on the road leading to Sake. Expect delays.',
     category: 'Road',
     location: 'Virunga',
-    status: 'pending',
+    status: 'verified',
     userId: 'user3',
     createdAt: new Date(now.getTime() - 30 * 60 * 1000), // 30 minutes ago
   },
@@ -58,8 +52,6 @@ export const mockAlerts: Alert[] = [
     status: 'verified',
     userId: 'user4',
     createdAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
-    verifiedAt: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000),
-    verifiedBy: 'admin1',
   },
    {
     id: '6',
@@ -70,8 +62,6 @@ export const mockAlerts: Alert[] = [
     status: 'verified',
     userId: 'user5',
     createdAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
-    verifiedAt: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000 + 2 * 60 * 60 * 1000),
-    verifiedBy: 'admin2',
   },
   {
     id: '7',
@@ -79,7 +69,7 @@ export const mockAlerts: Alert[] = [
     description: 'A user reported hearing strange noises and seeing unfamiliar people in the alley behind the main street. Requesting verification.',
     category: 'Security',
     location: 'Les Volcans',
-    status: 'pending',
+    status: 'verified',
     userId: 'user2',
     createdAt: new Date(now.getTime() - 1 * 60 * 60 * 1000), // 1 hour ago
   },

@@ -9,28 +9,28 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Alert } from "@/lib/types";
 
 export default function Home() {
-  const { isAdmin, isAuthLoading } = useAuth();
+  const { isAuthenticated, isAuthLoading } = useAuth();
   const router = useRouter();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthLoading && !isAdmin) {
+    if (!isAuthLoading && !isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthLoading, isAdmin, router]);
+  }, [isAuthLoading, isAuthenticated, router]);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (isAuthenticated) {
       setLoading(true);
       getVerifiedAlerts().then(data => {
         setAlerts(data);
         setLoading(false);
       });
     }
-  }, [isAdmin]);
+  }, [isAuthenticated]);
 
-  if (isAuthLoading || !isAdmin) {
+  if (isAuthLoading || !isAuthenticated) {
     return (
       <div className="container mx-auto px-4 py-8 space-y-6">
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
@@ -50,7 +50,7 @@ export default function Home() {
     );
   }
 
-  if (loading && isAdmin) {
+  if (loading && isAuthenticated) {
      return (
       <div className="container mx-auto px-4 py-8 space-y-6">
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center">

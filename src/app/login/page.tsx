@@ -15,16 +15,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
 export default function LoginPage() {
-  const { isAdmin, isAuthLoading } = useAuth();
+  const { isAuthenticated, isAuthLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthLoading && isAdmin) {
+    if (!isAuthLoading && isAuthenticated) {
       router.push('/');
     }
-  }, [isAuthLoading, isAdmin, router]);
+  }, [isAuthLoading, isAuthenticated, router]);
 
-  if (isAuthLoading || isAdmin) {
+  if (isAuthLoading || isAuthenticated) {
     return (
         <div className="container mx-auto flex items-center justify-center py-12">
             <Skeleton className="h-96 w-full max-w-md" />

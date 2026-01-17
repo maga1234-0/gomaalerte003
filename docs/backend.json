@@ -4,7 +4,7 @@
       "$schema": "http://json-schema.org/draft-07/schema#",
       "title": "Alert",
       "type": "object",
-      "description": "Represents an alert submitted by a user or verified by an admin.",
+      "description": "Represents an alert submitted by a user.",
       "properties": {
         "id": {
           "type": "string",
@@ -28,21 +28,12 @@
         },
         "status": {
           "type": "string",
-          "description": "Status of the alert (pending, verified, archived)."
+          "description": "Status of the alert (verified, archived)."
         },
         "createdAt": {
           "type": "string",
           "description": "Timestamp of when the alert was created.",
           "format": "date-time"
-        },
-        "verifiedAt": {
-          "type": "string",
-          "description": "Timestamp of when the alert was verified by an admin.",
-          "format": "date-time"
-        },
-        "verifiedBy": {
-          "type": "string",
-          "description": "Reference to AdminUser who verified the alert. (Relationship: AdminUser 1:N Alert)"
         },
         "userId": {
           "type": "string",
@@ -58,37 +49,6 @@
         "status",
         "createdAt",
         "userId"
-      ]
-    },
-    "AdminUser": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "AdminUser",
-      "type": "object",
-      "description": "Represents an administrator user with access to the admin dashboard.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the admin user."
-        },
-        "email": {
-          "type": "string",
-          "description": "Email address of the admin user.",
-          "format": "email"
-        },
-        "name": {
-          "type": "string",
-          "description": "Full name of the admin user."
-        },
-        "role": {
-          "type": "string",
-          "description": "Role of the admin user (e.g., superadmin, editor)."
-        }
-      },
-      "required": [
-        "id",
-        "email",
-        "name",
-        "role"
       ]
     }
   },
@@ -106,27 +66,11 @@
           "schema": {
             "$ref": "#/backend/entities/Alert"
           },
-          "description": "Collection of alerts. Includes fields like title, description, category, location, status, createdAt, verifiedAt, and verifiedBy. The 'verifiedBy' field contains the AdminUser ID, enabling direct authorization checks. The 'userId' field contains the UID of the user who created the alert.",
+          "description": "Collection of alerts. Includes fields like title, description, category, location, status, and createdAt. The 'userId' field contains the UID of the user who created the alert.",
           "params": [
             {
               "name": "alertId",
               "description": "Unique identifier for the alert."
-            }
-          ]
-        }
-      },
-      {
-        "path": "/admin_users/{adminUserId}",
-        "definition": {
-          "entityName": "AdminUser",
-          "schema": {
-            "$ref": "#/backend/entities/AdminUser"
-          },
-          "description": "Collection of admin users. Used to store admin user profiles and their roles.",
-          "params": [
-            {
-              "name": "adminUserId",
-              "description": "Unique identifier for the admin user."
             }
           ]
         }

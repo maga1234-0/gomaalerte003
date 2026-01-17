@@ -7,7 +7,7 @@ import { Logo } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function SiteHeader() {
-  const { isAdmin, isAuthLoading, login, logout } = useAuth();
+  const { isAuthenticated, isAuthLoading, login, logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -22,22 +22,24 @@ export function SiteHeader() {
           <nav className="flex items-center space-x-2">
             {isAuthLoading ? (
               <Skeleton className="h-10 w-24" />
-            ) : isAdmin ? (
+            ) : isAuthenticated ? (
               <>
                 <Link href="/report">
                   <Button>Report an Incident</Button>
-                </Link>
-                <Link href="/admin">
-                  <Button variant="outline">Dashboard</Button>
                 </Link>
                 <Button onClick={logout} variant="secondary">
                   Logout
                 </Button>
               </>
             ) : (
-              <Button onClick={login} variant="outline">
-                Login
-              </Button>
+              <>
+                <Link href="/login">
+                  <Button variant="outline">Login</Button>
+                </Link>
+                 <Link href="/signup">
+                  <Button>Sign Up</Button>
+                </Link>
+              </>
             )}
           </nav>
         </div>

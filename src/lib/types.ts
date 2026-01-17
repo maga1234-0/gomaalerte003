@@ -10,6 +10,4 @@ export type Alert = {
   status: AlertStatus;
   userId: string;
   createdAt: Date;
-  verifiedAt?: Date;
-  verifiedBy?: string; // admin_uid
 };

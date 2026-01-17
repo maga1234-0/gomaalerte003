@@ -1,11 +1,12 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
-import { useUser as useFirebaseUser, useAuth as useFirebaseAuthService, useFirestore, useDoc, useMemoFirebase } from '@/firebase';
-import { doc } from 'firebase/firestore';
+import React, { createContext, useContext, useCallback } from 'react';
+import { useUser as useFirebaseUser, useAuth as useFirebaseAuthService } from '@/firebase';
+import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 
 type AuthContextType = {
-  isAdmin: boolean;
+  user: User | null;
+  isAuthenticated: boolean;
   isAuthLoading: boolean;
   login: () => void;
   logout: () => void;
@@ -14,21 +15,11 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user, isUserLoading: isFirebaseUserLoading } = useFirebaseUser();
+  const { user, isUserLoading: isAuthLoading } = useFirebaseUser();
   const auth = useFirebaseAuthService();
-  const firestore = useFirestore();
   const router = useRouter();
 
-  const adminUserRef = useMemoFirebase(() => {
-    if (!user || !firestore) return null;
-    return doc(firestore, 'admin_users', user.uid);
-  }, [firestore, user]);
-
-  const { data: adminUser, isLoading: isAdminUserLoading } = useDoc(adminUserRef);
-
-  const isAdmin = !!adminUser;
-  const isAuthLoading = isFirebaseUserLoading || (!!user && isAdminUserLoading);
-
+  const isAuthenticated = !!user && !isAuthLoading;
 
   const login = useCallback(() => {
     router.push('/login');
@@ -43,7 +34,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [auth, router]);
 
   return (
-    <AuthContext.Provider value={{ isAdmin, isAuthLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isAuthLoading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
