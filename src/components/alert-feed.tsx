@@ -76,7 +76,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
         <h1 className="text-3xl font-bold font-headline text-primary">
-          Verified Alerts
+          ALL alerts
         </h1>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <Select
