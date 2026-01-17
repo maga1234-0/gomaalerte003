@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { LogOut, PlusCircle } from "lucide-react";
+import { LogOut, PlusCircle, Shield } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader() {
@@ -30,6 +30,12 @@ export function SiteHeader() {
                   <Button>
                     <PlusCircle />
                     <span className="hidden sm:inline">Report</span>
+                  </Button>
+                </Link>
+                <Link href="/admin">
+                  <Button variant="ghost">
+                    <Shield />
+                    <span className="hidden sm:inline">Admin</span>
                   </Button>
                 </Link>
                 <Button onClick={logout} variant="secondary">
