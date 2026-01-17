@@ -22,7 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const loginFormSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
-  password: z.string().min(6, "Password must be at least 6 characters long."),
+  password: z.string().min(1, "Password is required."),
 });
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
@@ -43,16 +43,25 @@ export function LoginForm() {
 
   async function onSubmit(data: LoginFormValues) {
     startTransition(() => {
-      initiateEmailSignIn(auth, data.email, data.password);
-      // We don't await here. The onAuthStateChanged listener in the provider
-      // will handle the user state change and redirect.
-      // For optimistic UI, we can assume success and navigate.
-      // The auth provider will handle redirecting back if auth fails.
-      toast({
-        title: "Logging In...",
-        description: "You will be redirected shortly.",
-      });
-      router.push("/");
+      initiateEmailSignIn(auth, data.email, data.password)
+        .then(() => {
+          toast({
+            title: "Logging In...",
+            description: "You will be redirected shortly.",
+          });
+          router.push("/");
+        })
+        .catch((error) => {
+            let description = "An unexpected error occurred. Please try again.";
+            if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                description = "Invalid email or password. Please try again.";
+            }
+            toast({
+              variant: "destructive",
+              title: "Login Failed",
+              description: description,
+            });
+        });
     });
   }
 

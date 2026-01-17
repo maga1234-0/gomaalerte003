@@ -43,14 +43,29 @@ export function SignupForm() {
 
   async function onSubmit(data: SignupFormValues) {
     startTransition(() => {
-      initiateEmailSignUp(auth, data.email, data.password);
-      // We don't await here. The onAuthStateChanged listener in the provider
-      // will handle the user state change and redirect.
-      toast({
-        title: "Creating Account...",
-        description: "You will be redirected shortly.",
-      });
-      router.push("/");
+      initiateEmailSignUp(auth, data.email, data.password)
+        .then(() => {
+          toast({
+            title: "Account Created",
+            description: "You will be redirected shortly.",
+          });
+          router.push("/");
+        })
+        .catch((error) => {
+          let description = "An unexpected error occurred. Please try again.";
+          if (error.code === 'auth/email-already-in-use') {
+            description = "This email is already registered. Please log in.";
+          } else if (error.code === 'auth/weak-password') {
+            description = "The password is too weak. Please use at least 6 characters.";
+          } else if (error.code === 'auth/invalid-email') {
+            description = "Please enter a valid email address.";
+          }
+          toast({
+            variant: "destructive",
+            title: "Sign Up Failed",
+            description: description,
+          });
+        });
     });
   }
 
