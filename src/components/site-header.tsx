@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LogOut, PlusCircle } from "lucide-react";
 
 export function SiteHeader() {
   const { isAuthenticated, isAuthLoading, login, logout } = useAuth();
@@ -25,10 +26,14 @@ export function SiteHeader() {
             ) : isAuthenticated ? (
               <>
                 <Link href="/report">
-                  <Button>Report an Incident</Button>
+                  <Button>
+                    <PlusCircle />
+                    <span className="hidden sm:inline">Report</span>
+                  </Button>
                 </Link>
                 <Button onClick={logout} variant="secondary">
-                  Logout
+                  <LogOut />
+                  <span className="hidden sm:inline">Logout</span>
                 </Button>
               </>
             ) : (

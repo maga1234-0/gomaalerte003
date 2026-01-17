@@ -183,18 +183,18 @@ _Shared from Goma Alert Platform_`;
   return (
     <Card className={cn("overflow-hidden border-l-4 shadow-sm hover:shadow-md transition-shadow", colorClasses)}>
       <CardHeader>
-        <div className="flex justify-between items-start gap-4">
-            <div className="flex-grow">
+        <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
+            <div className="flex-grow order-2 sm:order-1">
                 <Badge variant="outline" className={cn("mb-2", badgeClasses)}>
                     <CategoryIcon className="h-3 w-3 mr-1" />
                     {category}
                 </Badge>
-                <CardTitle className="font-headline text-xl">{alert.title || "Untitled Alert"}</CardTitle>
+                <CardTitle className="font-headline text-xl break-words">{alert.title || "Untitled Alert"}</CardTitle>
             </div>
-            <div className="text-xs text-muted-foreground text-right flex-shrink-0">
-                <p>{alert.location || "Not specified"}</p>
+            <div className="text-xs text-muted-foreground sm:text-right flex-shrink-0 order-1 sm:order-2 w-full sm:w-auto flex justify-between sm:block">
+                <p className="break-all">{alert.location || "Not specified"}</p>
                 {createdAtDate && (
-                    <p>
+                    <p className="flex-shrink-0">
                         {formatDistanceToNow(createdAtDate, {
                         addSuffix: true,
                         })}

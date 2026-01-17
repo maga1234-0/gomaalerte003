@@ -254,8 +254,8 @@ export function ReportForm() {
         
         <div className="space-y-2">
             <FormLabel>Vocal Report (Optional)</FormLabel>
-            <div className="flex items-center gap-4 rounded-lg border p-4">
-                <div className="flex-grow">
+            <div className="flex flex-col sm:flex-row items-center gap-4 rounded-lg border p-4">
+                <div className="flex-grow w-full">
                     <p className="text-sm text-muted-foreground">
                         {isRecording
                         ? "Recording in progress..."
@@ -265,11 +265,11 @@ export function ReportForm() {
                     </p>
                 </div>
                 {!isRecording ? (
-                <Button type="button" onClick={handleStartRecording} disabled={isPending}>
+                <Button type="button" onClick={handleStartRecording} disabled={isPending} className="w-full sm:w-auto flex-shrink-0">
                     <Mic className="mr-2 h-4 w-4" /> Start Recording
                 </Button>
                 ) : (
-                <Button type="button" onClick={handleStopRecording} variant="destructive">
+                <Button type="button" onClick={handleStopRecording} variant="destructive" className="w-full sm:w-auto flex-shrink-0">
                     <Square className="mr-2 h-4 w-4" /> Stop Recording
                 </Button>
                 )}
