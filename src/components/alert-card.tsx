@@ -181,7 +181,7 @@ _Shared from Goma Alert Platform_`;
   const createdAtDate = getCreatedAtDate();
 
   return (
-    <Card className={cn("overflow-hidden border-l-4 shadow-sm hover:shadow-md transition-shadow", colorClasses)}>
+    <Card className={cn("overflow-hidden border-l-4 shadow-sm transition-all duration-200 hover:shadow-lg hover:scale-[1.01]", colorClasses)}>
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
             <div className="flex-grow order-2 sm:order-1">
