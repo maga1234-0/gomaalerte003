@@ -1,6 +1,7 @@
 /**
  * Core Philosophy: This ruleset provides a public-read model for alerts,
  * allowing any user (including anonymous) to submit new alerts, while
+
  * reserving all management (verification, archival) for administrators.
  * It follows a Query According to Permissions (QAP) model, where clients
  * are expected to query for the data they are allowed to see (e.g., only
@@ -87,15 +88,15 @@ service cloud.firestore {
     /**
      * @description Stores administrator profiles and roles. This collection governs who has administrative privileges across the app.
      * @path /admin_users/{adminUserId}
-     * @allow (get) An administrator can read their own admin document to check their status.
+     * @allow (get) An authenticated user can read their own admin document to check their status.
      * @deny (list) Listing all admins is disabled to prevent user enumeration.
      * @deny (get) A user cannot read another user's admin profile.
      * @deny (create, update, delete) All write operations are disabled from the client to prevent privilege escalation. Admins must be managed via a secure backend process.
      * @principle Enforces strict role-based access control for sensitive administrative data and prevents client-side privilege escalation.
      */
     match /admin_users/{adminUserId} {
-      // READ: Only administrators can check for their own status.
-      allow get: if isAdmin() && request.auth.uid == adminUserId;
+      // READ: A user can only read their own admin status document.
+      allow get: if isSignedIn() && request.auth.uid == adminUserId;
       allow list: if false;
 
       // WRITE: All client-side writes are forbidden to prevent privilege escalation.
