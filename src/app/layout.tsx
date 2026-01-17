@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { SiteHeader } from "@/components/site-header";
 import { AuthProvider } from "@/hooks/use-auth";
 import { FirebaseClientProvider } from "@/firebase";
+import { OnlineStatusIndicator } from "@/components/online-status-indicator";
 
 export const metadata: Metadata = {
   title: "Goma Alert",
@@ -27,6 +28,7 @@ export default function RootLayout({
         <FirebaseClientProvider>
           <AuthProvider>
             <div className="relative flex min-h-screen flex-col">
+              <OnlineStatusIndicator />
               <SiteHeader />
               <main className="flex-1">{children}</main>
             </div>
