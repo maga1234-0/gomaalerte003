@@ -20,13 +20,13 @@ export function SiteHeader() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
-            <Link href="/report">
-              <Button>Report an Incident</Button>
-            </Link>
             {isAuthLoading ? (
               <Skeleton className="h-10 w-24" />
             ) : isAdmin ? (
               <>
+                <Link href="/report">
+                  <Button>Report an Incident</Button>
+                </Link>
                 <Link href="/admin">
                   <Button variant="outline">Dashboard</Button>
                 </Link>
@@ -36,7 +36,7 @@ export function SiteHeader() {
               </>
             ) : (
               <Button onClick={login} variant="outline">
-                Admin Login
+                Login
               </Button>
             )}
           </nav>

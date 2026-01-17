@@ -27,7 +27,6 @@ import { useToast } from "@/hooks/use-toast";
 import { ALERT_CATEGORIES, GOMA_NEIGHBORHOODS } from "@/lib/constants";
 import { submitReport } from "@/lib/actions";
 import React from "react";
-import { useAuth } from "@/hooks/use-auth";
 import { useUser } from "@/firebase";
 
 const reportFormSchema = z.object({
@@ -46,7 +45,6 @@ export function ReportForm() {
   const { toast } = useToast();
   const [isPending, startTransition] = React.useTransition();
   const { user } = useUser();
-  const { login } = useAuth();
 
 
   const form = useForm<ReportFormValues>({
@@ -63,8 +61,8 @@ export function ReportForm() {
             variant: "destructive",
             title: "Authentication Required",
             description: "You must be logged in to submit a report.",
-            action: <Button onClick={() => login()}>Login</Button>
         });
+        router.push("/login");
         return;
     }
 
@@ -176,7 +174,7 @@ export function ReportForm() {
           />
         </div>
         
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending || !user}>
           {isPending ? "Submitting..." : "Submit Report"}
         </Button>
       </form>

@@ -52,7 +52,7 @@ export function LoginForm() {
         title: "Logging In...",
         description: "You will be redirected shortly.",
       });
-      router.push("/admin");
+      router.push("/");
     });
   }
 
