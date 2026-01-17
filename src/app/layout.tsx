@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { AuthProvider } from "@/hooks/use-auth";
 import { FirebaseClientProvider } from "@/firebase";
 import { OnlineStatusIndicator } from "@/components/online-status-indicator";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Goma Alert",
@@ -25,16 +26,23 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("min-h-screen bg-background font-body antialiased")}>
-        <FirebaseClientProvider>
-          <AuthProvider>
-            <div className="relative flex min-h-screen flex-col">
-              <OnlineStatusIndicator />
-              <SiteHeader />
-              <main className="flex-1">{children}</main>
-            </div>
-            <Toaster />
-          </AuthProvider>
-        </FirebaseClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <FirebaseClientProvider>
+            <AuthProvider>
+              <div className="relative flex min-h-screen flex-col">
+                <OnlineStatusIndicator />
+                <SiteHeader />
+                <main className="flex-1">{children}</main>
+              </div>
+              <Toaster />
+            </AuthProvider>
+          </FirebaseClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
