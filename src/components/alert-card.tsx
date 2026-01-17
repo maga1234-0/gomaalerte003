@@ -70,14 +70,38 @@ export function AlertCard({ alert }: AlertCardProps) {
   const category = alert.category || 'Other';
   const { icon: CategoryIcon, colorClasses, badgeClasses } = categoryThemes[category];
 
-  const handleShare = () => {
-    const message = `*Goma Alert: ${category}*
+  const handleShare = async () => {
+    const title = `Goma Alert: ${alert.title || 'Untitled Alert'}`;
+    const text = `*Goma Alert: ${category}*
 *Title:* ${alert.title || 'Untitled Alert'}
 *Location:* ${alert.location || 'Not specified'}
 *Description:* ${alert.description || 'No description provided.'}
 
 _Shared from Goma Alert Platform_`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+    if (alert.audioUrl && navigator.share) {
+      try {
+        const response = await fetch(alert.audioUrl);
+        const blob = await response.blob();
+        const file = new File([blob], `goma-alert-${alert.id}.webm`, { type: blob.type || 'audio/webm' });
+
+        const shareData = {
+          title,
+          text,
+          files: [file],
+        };
+
+        // Try sharing and fall back if it fails.
+        await navigator.share(shareData);
+        return; // If share is successful, we're done.
+      } catch (error) {
+        console.error("Web Share API with file failed, falling back to text-only share.", error);
+        // Fallback to text-only share below.
+      }
+    }
+
+    // Fallback to WhatsApp link if Web Share is not supported, or if it fails.
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, "_blank");
   };
 
@@ -126,7 +150,7 @@ _Shared from Goma Alert Platform_`;
       <CardFooter className="flex justify-end">
         <Button variant="ghost" size="sm" onClick={handleShare}>
           <Share2 className="mr-2 h-4 w-4" />
-          Open WhatsApp
+          Share
         </Button>
       </CardFooter>
     </Card>
