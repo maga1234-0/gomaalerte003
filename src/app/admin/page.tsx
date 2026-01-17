@@ -3,9 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
-import { collection, query, orderBy } from 'firebase/firestore';
-import type { UserProfile } from '@/lib/types';
+import { useUsers } from '@/hooks/use-users';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -14,17 +12,8 @@ import { format } from 'date-fns';
 export default function AdminPage() {
   const { isAuthenticated, isAuthLoading } = useAuth();
   const router = useRouter();
-  const firestore = useFirestore();
-
-  const usersQuery = useMemoFirebase(
-    () =>
-      firestore
-        ? query(collection(firestore, 'users'), orderBy('createdAt', 'desc'))
-        : null,
-    [firestore]
-  );
-
-  const { data: users, isLoading: usersLoading } = useCollection<UserProfile>(usersQuery);
+  
+  const { data: users, isLoading: usersLoading } = useUsers();
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {

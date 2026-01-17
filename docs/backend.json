@@ -82,39 +82,17 @@
     ]
   },
   "firestore": {
-    "structure": [
-      {
-        "path": "/alerts/{alertId}",
-        "definition": {
-          "entityName": "Alert",
-          "schema": {
-            "$ref": "#/backend/entities/Alert"
-          },
-          "description": "Collection of alerts. Includes fields like title, description, category, location, status, and createdAt. The 'userId' field contains the UID of the user who created the alert.",
-          "params": [
-            {
-              "name": "alertId",
-              "description": "Unique identifier for the alert."
-            }
-          ]
-        }
+    "/alerts/{alertId}": {
+      "schema": {
+        "$ref": "#/entities/Alert"
       },
-      {
-        "path": "/users/{userId}",
-        "definition": {
-          "entityName": "UserProfile",
-          "schema": {
-            "$ref": "#/backend/entities/UserProfile"
-          },
-          "description": "Collection of user profiles. The 'userId' is the same as the Firebase Auth UID.",
-          "params": [
-            {
-              "name": "userId",
-              "description": "The user's unique identifier (UID)."
-            }
-          ]
-        }
-      }
-    ]
+      "description": "Collection of alerts. Includes fields like title, description, category, location, status, and createdAt. The 'userId' field contains the UID of the user who created the alert."
+    },
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Collection of user profiles. The 'userId' is the same as the Firebase Auth UID."
+    }
   }
 }
