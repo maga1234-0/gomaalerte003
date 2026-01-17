@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { Alert, AlertCategory } from "@/lib/types";
 import { AlertCard } from "./alert-card";
 import {
@@ -18,28 +18,58 @@ interface AlertFeedProps {
   initialAlerts: Alert[];
 }
 
+const HIDDEN_ALERTS_STORAGE_KEY = 'goma-alert-hidden-alerts';
+
 export function AlertFeed({ initialAlerts }: AlertFeedProps) {
   const [alerts, setAlerts] = useState<Alert[]>(initialAlerts);
+  const [hiddenAlerts, setHiddenAlerts] = useState<string[]>([]);
   const [categoryFilter, setCategoryFilter] = useState<AlertCategory | "all">(
     "all"
   );
   const [locationFilter, setLocationFilter] = useState<string>("all");
 
+  useEffect(() => {
+    try {
+      const storedHiddenAlerts = localStorage.getItem(HIDDEN_ALERTS_STORAGE_KEY);
+      if (storedHiddenAlerts) {
+        setHiddenAlerts(JSON.parse(storedHiddenAlerts));
+      }
+    } catch (error) {
+      console.error("Failed to parse hidden alerts from localStorage", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    setAlerts(initialAlerts);
+  }, [initialAlerts]);
+
   const filteredAlerts = useMemo(() => {
-    return alerts.filter((alert) => {
-      const categoryMatch =
-        categoryFilter === "all" || alert.category === categoryFilter;
-      const locationMatch =
-        locationFilter === "all" || alert.location === locationFilter;
-      return categoryMatch && locationMatch;
-    });
-  }, [alerts, categoryFilter, locationFilter]);
+    return alerts
+      .filter(alert => !hiddenAlerts.includes(alert.id))
+      .filter((alert) => {
+        const categoryMatch =
+          categoryFilter === "all" || alert.category === categoryFilter;
+        const locationMatch =
+          locationFilter === "all" || alert.location === locationFilter;
+        return categoryMatch && locationMatch;
+      });
+  }, [alerts, categoryFilter, locationFilter, hiddenAlerts]);
   
   const uniqueLocations = ["all", ...GOMA_NEIGHBORHOODS];
 
   const handleClearFilters = () => {
     setCategoryFilter("all");
     setLocationFilter("all");
+  };
+
+  const handleHideAlert = (alertId: string) => {
+    const newHiddenAlerts = [...hiddenAlerts, alertId];
+    setHiddenAlerts(newHiddenAlerts);
+    try {
+      localStorage.setItem(HIDDEN_ALERTS_STORAGE_KEY, JSON.stringify(newHiddenAlerts));
+    } catch (error) {
+        console.error("Failed to save hidden alerts to localStorage", error);
+    }
   };
 
   return (
@@ -85,7 +115,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
       {filteredAlerts.length > 0 ? (
         <div className="grid gap-4">
           {filteredAlerts.map((alert) => (
-            <AlertCard key={alert.id} alert={alert} />
+            <AlertCard key={alert.id} alert={alert} onHide={handleHideAlert} />
           ))}
         </div>
       ) : (

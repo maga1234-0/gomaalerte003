@@ -19,6 +19,7 @@ import {
   HelpCircle,
   Share2,
   Trash2,
+  MoreVertical,
 } from "lucide-react";
 import React from "react";
 import {
@@ -32,12 +33,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useUser, useFirestore, deleteDocumentNonBlocking } from "@/firebase";
 import { doc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 
 interface AlertCardProps {
   alert: Alert;
+  onHide: (alertId: string) => void;
 }
 
 const categoryThemes: Record<
@@ -80,7 +89,7 @@ const categoryThemes: Record<
   },
 };
 
-export function AlertCard({ alert }: AlertCardProps) {
+export function AlertCard({ alert, onHide }: AlertCardProps) {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
@@ -124,7 +133,7 @@ _Shared from Goma Alert Platform_`;
     window.open(whatsappUrl, "_blank");
   };
 
-  const handleDelete = () => {
+  const handleDeleteForAll = () => {
     if (!firestore || !isOwner) return;
 
     const alertRef = doc(firestore, 'alerts', alert.id);
@@ -132,7 +141,15 @@ _Shared from Goma Alert Platform_`;
 
     toast({
       title: "Alert Deleted",
-      description: "The alert has been successfully removed.",
+      description: "The alert has been permanently removed for all users.",
+    });
+  };
+
+  const handleDeleteForMe = () => {
+    onHide(alert.id);
+    toast({
+        title: "Alert Hidden",
+        description: "This alert will no longer be shown on your feed.",
     });
   };
 
@@ -180,34 +197,54 @@ _Shared from Goma Alert Platform_`;
         )}
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        {isOwner && (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive hover:bg-red-50">
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete this alert.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
         <Button variant="ghost" size="sm" onClick={handleShare}>
           <Share2 className="mr-2 h-4 w-4" />
           Share via WhatsApp
         </Button>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                    <MoreVertical className="h-4 w-4" />
+                    <span className="sr-only">More options</span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleDeleteForMe}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    <span>Delete for me</span>
+                </DropdownMenuItem>
+                {isOwner && (
+                    <>
+                        <DropdownMenuSeparator />
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <DropdownMenuItem
+                                    className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                                    onSelect={(e) => e.preventDefault()} // Prevents Dropdown from closing
+                                >
+                                    <Trash2 className="mr-2 h-4 w-4" />
+                                    <span>Delete for all</span>
+                                </DropdownMenuItem>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete this alert for everyone.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleDeleteForAll} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                    Delete
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </>
+                )}
+            </DropdownMenuContent>
+        </DropdownMenu>
       </CardFooter>
     </Card>
   );
