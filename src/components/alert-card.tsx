@@ -150,7 +150,7 @@ _Shared from Goma Alert Platform_`;
       <CardFooter className="flex justify-end">
         <Button variant="ghost" size="sm" onClick={handleShare}>
           <Share2 className="mr-2 h-4 w-4" />
-          Share
+          Share via WhatsApp
         </Button>
       </CardFooter>
     </Card>
