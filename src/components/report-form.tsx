@@ -31,12 +31,10 @@ import { collection, serverTimestamp } from "firebase/firestore";
 import { Mic, Square } from "lucide-react";
 
 const reportFormSchema = z.object({
-  title: z.string().min(5, "Title must be at least 5 characters long."),
-  description: z.string().min(20, "Please provide a more detailed description."),
-  category: z.enum(ALERT_CATEGORIES, {
-    required_error: "Please select a category.",
-  }),
-  location: z.string({ required_error: "Please select a location." }),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  category: z.enum(ALERT_CATEGORIES).optional(),
+  location: z.string().optional(),
 });
 
 type ReportFormValues = z.infer<typeof reportFormSchema>;
@@ -148,7 +146,7 @@ export function ReportForm() {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Title (Optional)</FormLabel>
               <FormControl>
                 <Input placeholder="e.g., Power Outage in Mabanga" {...field} />
               </FormControl>
@@ -161,7 +159,7 @@ export function ReportForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>Description (Optional)</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Describe the incident in detail..."
@@ -179,7 +177,7 @@ export function ReportForm() {
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Category (Optional)</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
@@ -203,7 +201,7 @@ export function ReportForm() {
             name="location"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Location</FormLabel>
+                <FormLabel>Location (Optional)</FormLabel>
                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>

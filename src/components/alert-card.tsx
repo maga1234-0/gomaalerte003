@@ -67,13 +67,14 @@ const categoryThemes: Record<
 };
 
 export function AlertCard({ alert }: AlertCardProps) {
-  const { icon: CategoryIcon, colorClasses, badgeClasses } = categoryThemes[alert.category];
+  const category = alert.category || 'Other';
+  const { icon: CategoryIcon, colorClasses, badgeClasses } = categoryThemes[category];
 
   const handleShare = () => {
-    const message = `*Goma Alert: ${alert.category}*
-*Title:* ${alert.title}
-*Location:* ${alert.location}
-*Description:* ${alert.description}
+    const message = `*Goma Alert: ${category}*
+*Title:* ${alert.title || 'Untitled Alert'}
+*Location:* ${alert.location || 'Not specified'}
+*Description:* ${alert.description || 'No description provided.'}
 
 _Shared from Goma Alert Platform_`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
@@ -98,12 +99,12 @@ _Shared from Goma Alert Platform_`;
             <div className="flex-grow">
                 <Badge variant="outline" className={cn("mb-2", badgeClasses)}>
                     <CategoryIcon className="h-3 w-3 mr-1" />
-                    {alert.category}
+                    {category}
                 </Badge>
-                <CardTitle className="font-headline text-xl">{alert.title}</CardTitle>
+                <CardTitle className="font-headline text-xl">{alert.title || "Untitled Alert"}</CardTitle>
             </div>
             <div className="text-xs text-muted-foreground text-right flex-shrink-0">
-                <p>{alert.location}</p>
+                <p>{alert.location || "Not specified"}</p>
                 <p>
                     {formatDistanceToNow(createdAtDate, {
                     addSuffix: true,

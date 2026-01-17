@@ -47,10 +47,6 @@
       },
       "required": [
         "id",
-        "title",
-        "description",
-        "category",
-        "location",
         "status",
         "createdAt",
         "userId"

@@ -3,10 +3,10 @@ export type AlertStatus = 'pending' | 'verified' | 'archived';
 
 export type Alert = {
   id: string;
-  title: string;
-  description: string;
-  category: AlertCategory;
-  location: string;
+  title?: string;
+  description?: string;
+  category?: AlertCategory;
+  location?: string;
   status: AlertStatus;
   userId: string;
   createdAt: Date;
