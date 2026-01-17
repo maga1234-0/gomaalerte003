@@ -31,7 +31,7 @@ type LoginFormValues = z.infer<typeof loginFormSchema>;
 export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, setIsPending] = React.useState(false);
   const auth = useFirebaseAuth();
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -44,27 +44,26 @@ export function LoginForm() {
   });
 
   async function onSubmit(data: LoginFormValues) {
-    startTransition(() => {
-      initiateEmailSignIn(auth, data.email, data.password)
-        .then(() => {
-          toast({
-            title: "Logging In...",
-            description: "You will be redirected shortly.",
-          });
-          router.push("/");
-        })
-        .catch((error) => {
-            let description = "An unexpected error occurred. Please try again.";
-            if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                description = "Invalid email or password. Please try again.";
-            }
-            toast({
-              variant: "destructive",
-              title: "Login Failed",
-              description: description,
-            });
-        });
-    });
+    setIsPending(true);
+    try {
+      await initiateEmailSignIn(auth, data.email, data.password);
+      toast({
+        title: "Logging In...",
+        description: "You will be redirected shortly.",
+      });
+      router.push("/");
+    } catch (error: any) {
+      let description = "An unexpected error occurred. Please try again.";
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          description = "Invalid email or password. Please try again.";
+      }
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: description,
+      });
+      setIsPending(false);
+    }
   }
 
   return (

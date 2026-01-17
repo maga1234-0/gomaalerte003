@@ -32,7 +32,7 @@ type SignupFormValues = z.infer<typeof signupFormSchema>;
 export function SignupForm() {
   const router = useRouter();
   const { toast } = useToast();
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, setIsPending] = React.useState(false);
   const auth = useFirebaseAuth();
   const firestore = useFirestore();
   const [showPassword, setShowPassword] = React.useState(false);
@@ -47,41 +47,40 @@ export function SignupForm() {
 
   async function onSubmit(data: SignupFormValues) {
     if (!firestore) return;
+    setIsPending(true);
 
-    startTransition(() => {
-      initiateEmailSignUp(auth, data.email, data.password)
-        .then((userCredential) => {
-          if (userCredential.user) {
-            const userRef = doc(firestore, 'users', userCredential.user.uid);
-            const userData = {
-              uid: userCredential.user.uid,
-              email: userCredential.user.email,
-              createdAt: serverTimestamp(),
-            };
-            setDocumentNonBlocking(userRef, userData, {});
-          }
-          toast({
-            title: "Account Created",
-            description: "You will be redirected shortly.",
-          });
-          router.push("/");
-        })
-        .catch((error) => {
-          let description = "An unexpected error occurred. Please try again.";
-          if (error.code === 'auth/email-already-in-use') {
-            description = "This email is already registered. Please log in.";
-          } else if (error.code === 'auth/weak-password') {
-            description = "The password is too weak. Please use at least 6 characters.";
-          } else if (error.code === 'auth/invalid-email') {
-            description = "Please enter a valid email address.";
-          }
-          toast({
-            variant: "destructive",
-            title: "Sign Up Failed",
-            description: description,
-          });
+    try {
+      const userCredential = await initiateEmailSignUp(auth, data.email, data.password);
+      if (userCredential.user) {
+        const userRef = doc(firestore, 'users', userCredential.user.uid);
+        const userData = {
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
+          createdAt: serverTimestamp(),
+        };
+        setDocumentNonBlocking(userRef, userData, {});
+      }
+      toast({
+        title: "Account Created",
+        description: "You will be redirected shortly.",
+      });
+      router.push("/");
+    } catch (error: any) {
+        let description = "An unexpected error occurred. Please try again.";
+        if (error.code === 'auth/email-already-in-use') {
+          description = "This email is already registered. Please log in.";
+        } else if (error.code === 'auth/weak-password') {
+          description = "The password is too weak. Please use at least 6 characters.";
+        } else if (error.code === 'auth/invalid-email') {
+          description = "Please enter a valid email address.";
+        }
+        toast({
+          variant: "destructive",
+          title: "Sign Up Failed",
+          description: description,
         });
-    });
+        setIsPending(false);
+    }
   }
 
   return (
