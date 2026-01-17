@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginForm } from "@/components/login-form";
+import { SignupForm } from "@/components/signup-form";
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const { isAdmin, isAuthLoading } = useAuth();
   const router = useRouter();
 
@@ -36,17 +36,17 @@ export default function LoginPage() {
     <div className="container mx-auto flex items-center justify-center py-12">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="font-headline text-2xl">Login</CardTitle>
+          <CardTitle className="font-headline text-2xl">Create an Account</CardTitle>
           <CardDescription>
-            Enter your credentials to access the platform.
+            Enter your email and password to sign up.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm />
+          <SignupForm />
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline">
-              Sign Up
+            Already have an account?{' '}
+            <Link href="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
+              Login
             </Link>
           </p>
         </CardContent>
