@@ -26,10 +26,15 @@ export default function AppleIcon() {
         }}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="hsl(210 40% 98%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M5.5 8.5 9 12l-3.5 3.5L2 12l3.5-3.5Z"/>
-          <path d="m12 12 3.5 3.5 3.5-3.5-3.5-3.5Z"/>
-          <path d="M2 8.5h20"/>
-          <path d="M5 15.5h14"/>
+          <path d="M7 12a5 5 0 0 1 5-5v0a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5v0a5 5 0 0 1-5-5Z"/>
+          <path d="M12 2v2"/>
+          <path d="M12 20v2"/>
+          <path d="m4.9 4.9 1.4 1.4"/>
+          <path d="m17.7 17.7 1.4 1.4"/>
+          <path d="m4.9 19.1 1.4-1.4"/>
+          <path d="m17.7 6.3 1.4-1.4"/>
+          <path d="M2 12h2"/>
+          <path d="M20 12h2"/>
         </svg>
       </div>
     ),
