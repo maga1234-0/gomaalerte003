@@ -122,13 +122,25 @@ export function ReportForm() {
     
     startTransition(() => {
       const alertsCollection = collection(firestore, 'alerts');
-      addDocumentNonBlocking(alertsCollection, {
-        ...data,
+      
+      // Filter out undefined values before submitting to Firestore
+      const reportData: { [key: string]: any } = {
         userId: user.uid,
-        status: 'verified', // All reports are automatically verified
+        status: 'verified',
         createdAt: serverTimestamp(),
-        audioUrl: audioDataUri,
+      };
+      
+      Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+          reportData[key] = value;
+        }
       });
+  
+      if (audioDataUri) {
+        reportData.audioUrl = audioDataUri;
+      }
+      
+      addDocumentNonBlocking(alertsCollection, reportData);
       
       toast({
         title: "Report Submitted",
