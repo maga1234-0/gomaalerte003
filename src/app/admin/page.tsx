@@ -13,7 +13,7 @@ export default function AdminPage() {
   const { isAuthenticated, isAuthLoading } = useAuth();
   const router = useRouter();
   
-  const { data: users, isLoading: usersLoading } = useUsers();
+  const { data: users, isLoading: usersLoading } = useUsers(isAuthenticated);
 
   useEffect(() => {
     if (!isAuthLoading && !isAuthenticated) {
