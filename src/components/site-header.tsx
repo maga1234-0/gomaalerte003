@@ -26,12 +26,6 @@ export function SiteHeader() {
               <Skeleton className="h-10 w-24" />
             ) : isAuthenticated ? (
               <>
-                <Link href="/admin">
-                  <Button variant="ghost">
-                    <Shield />
-                    <span className="hidden sm:inline">Admin</span>
-                  </Button>
-                </Link>
                 <Link href="/report">
                   <Button>
                     <PlusCircle />
