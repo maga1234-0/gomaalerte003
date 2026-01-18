@@ -29,7 +29,7 @@ import { ALERT_CATEGORIES, GOMA_NEIGHBORHOODS } from "@/lib/constants";
 import React from "react";
 import { useFirestore, useUser, addDocumentNonBlocking } from "@/firebase";
 import { collection, serverTimestamp } from "firebase/firestore";
-import { Mic, Square } from "lucide-react";
+import { Mic, Square, MicOff } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -38,6 +38,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const reportFormSchema = z.object({
   title: z.string().optional(),
@@ -67,10 +68,23 @@ export function ReportForm() {
   const [audioDataUri, setAudioDataUri] = React.useState<string | null>(null);
   const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
   const [isRecordingDialogOpen, setIsRecordingDialogOpen] = React.useState(false);
+  const [hasMicPermission, setHasMicPermission] = React.useState<boolean | undefined>(undefined);
 
   const handleStartRecording = async () => {
+    if (typeof navigator.mediaDevices === 'undefined' || !navigator.mediaDevices.getUserMedia) {
+        toast({
+            variant: "destructive",
+            title: "Media Not Supported",
+            description: "Audio recording is not supported on this browser or device.",
+        });
+        setHasMicPermission(false);
+        setIsRecordingDialogOpen(false);
+        return;
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      setHasMicPermission(true);
       
       const mimeTypes = [
         'audio/mp4',
@@ -99,7 +113,6 @@ export function ReportForm() {
       };
   
       recorder.onstop = () => {
-        // If there are no chunks, it means recording was cancelled, so just stop the stream.
         if (audioChunks.length === 0) {
           stream.getTracks().forEach(track => track.stop());
           return;
@@ -111,18 +124,18 @@ export function ReportForm() {
           const base64data = reader.result as string;
           setAudioDataUri(base64data);
         };
-        // Stop all tracks to release microphone
         stream.getTracks().forEach(track => track.stop());
       };
   
       recorder.start();
       setIsRecording(true);
-      setAudioDataUri(null); // Clear previous recording
+      setAudioDataUri(null);
       toast({
         title: "Recording started...",
       });
     } catch (err) {
       console.error("Failed to start recording", err);
+      setHasMicPermission(false);
       toast({
         variant: "destructive",
         title: "Microphone Error",
@@ -148,9 +161,8 @@ export function ReportForm() {
     if (open) {
       setIsRecordingDialogOpen(true);
     } else {
-      // Dialog is closing. If we are recording, it's a cancellation.
       if (mediaRecorderRef.current && isRecording) {
-          mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop()); // Stop mic access
+          mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
           setIsRecording(false);
           toast({ title: "Recording cancelled." });
       }
@@ -178,7 +190,6 @@ export function ReportForm() {
     startTransition(() => {
       const alertsCollection = collection(firestore, 'alerts');
       
-      // Filter out undefined values before submitting to Firestore
       const reportData: { [key: string]: any } = {
         userId: user.uid,
         status: 'verified',
@@ -301,7 +312,7 @@ export function ReportForm() {
                     
                     <Dialog open={isRecordingDialogOpen} onOpenChange={onDialogChange}>
                         <DialogTrigger asChild>
-                            <Button type="button" disabled={isPending} className="w-full sm:w-auto flex-shrink-0">
+                            <Button type="button" disabled={isPending || hasMicPermission === false} className="w-full sm:w-auto flex-shrink-0">
                                 <Mic className="mr-2 h-4 w-4" /> 
                                 Record Audio
                             </Button>
@@ -334,6 +345,16 @@ export function ReportForm() {
                     </Dialog>
                 </div>
                 
+                {hasMicPermission === false && (
+                    <Alert variant="destructive">
+                        <MicOff className="h-4 w-4" />
+                        <AlertTitle>Microphone Access Required</AlertTitle>
+                        <AlertDescription>
+                        To record an audio report, please allow microphone access in your browser settings.
+                        </AlertDescription>
+                    </Alert>
+                )}
+
                 {audioDataUri && (
                     <div className="space-y-2 pt-4 border-t">
                         <p className="text-sm font-medium text-muted-foreground">Audio Preview</p>
