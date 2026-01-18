@@ -160,7 +160,7 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
   const handleDeleteForMe = () => {
     onHide(alert.id);
     toast({
-        title: "Alerte supprimée",
+        title: "Alerte masquée",
         description: "Cette alerte n'apparaîtra plus dans votre fil d'actualité.",
     });
   };
@@ -180,7 +180,7 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
   return (
     <Card
       className={cn(
-        "overflow-hidden border-l-4 shadow-sm transition-all duration-300 hover:shadow-lg hover:scale-[1.01]",
+        "overflow-hidden border-l-4 shadow-sm transition-shadow duration-200 hover:shadow-lg",
         colorClasses
       )}
     >
@@ -231,7 +231,7 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleDeleteForMe}>
                     <Trash2 className="mr-2 h-4 w-4" />
-                    <span>Supprimer pour moi</span>
+                    <span>Masquer pour moi</span>
                 </DropdownMenuItem>
                 {isOwner && (
                     <>

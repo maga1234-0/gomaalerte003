@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
@@ -72,7 +73,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
       </div>
 
       {filteredAlerts.length > 0 ? (
-        <div className="grid gap-4">
+        <div className="flex flex-col gap-4">
           {filteredAlerts.map((alert) => (
             <AlertCard key={alert.id} alert={alert} onHide={handleHideAlert} />
           ))}
