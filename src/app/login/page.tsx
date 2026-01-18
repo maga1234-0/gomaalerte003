@@ -50,29 +50,29 @@ export default function LoginPage() {
     <div className="container mx-auto flex items-center justify-center py-12">
       <Card className={cn("w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300")}>
         <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
-          <CardTitle className="font-headline text-2xl">Welcome to Goma Alert</CardTitle>
+          <CardTitle className="font-headline text-2xl">Bienvenue sur Goma Alerte</CardTitle>
           <CardDescription>
-            Log in to your account to report incidents and view alerts.
+            Connectez-vous à votre compte pour signaler des incidents et voir les alertes.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />
           <p className="mt-4 text-center text-sm text-muted-foreground animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
-            Don't have an account?{' '}
+            Vous n'avez pas de compte ?{' '}
             <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline">
-              Sign up
+              Inscrivez-vous
             </Link>
           </p>
         </CardContent>
         <CardFooter className="flex flex-col items-center justify-center gap-4 pt-6 border-t animate-in fade-in-0 slide-in-from-bottom-5 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
-          <p className="text-sm text-muted-foreground">Scan to open on your phone</p>
+          <p className="text-sm text-muted-foreground">Scannez pour ouvrir sur votre téléphone</p>
           
           {isLocalhost ? (
              <Alert>
                 <Terminal className="h-4 w-4" />
-                <AlertTitle>Developer Notice</AlertTitle>
+                <AlertTitle>Avis au développeur</AlertTitle>
                 <AlertDescription>
-                  QR code is hidden on localhost. It will be displayed and functional when your app is deployed to a public URL.
+                  Le code QR est masqué sur localhost. Il sera affiché et fonctionnel lorsque votre application sera déployée sur une URL publique.
                 </AlertDescription>
               </Alert>
           ) : url ? (

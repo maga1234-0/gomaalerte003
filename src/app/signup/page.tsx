@@ -36,17 +36,17 @@ export default function SignupPage() {
     <div className="container mx-auto flex items-center justify-center py-12">
       <Card className="w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300">
         <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
-          <CardTitle className="font-headline text-2xl">Create an Account</CardTitle>
+          <CardTitle className="font-headline text-2xl">Créer un compte</CardTitle>
           <CardDescription>
-            Join Goma Alert to stay informed and report incidents.
+            Rejoignez Goma Alerte pour rester informé et signaler des incidents.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <SignupForm />
           <p className="mt-4 text-center text-sm text-muted-foreground animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
-            Already have an account?{' '}
+            Vous avez déjà un compte ?{' '}
             <Link href="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
-              Log in
+              Connectez-vous
             </Link>
           </p>
         </CardContent>

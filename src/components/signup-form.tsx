@@ -23,8 +23,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 const signupFormSchema = z.object({
-  email: z.string().email("Please enter a valid email."),
-  password: z.string().min(6, "Password must be at least 6 characters."),
+  email: z.string().email("Veuillez entrer un e-mail valide."),
+  password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères."),
 });
 
 type SignupFormValues = z.infer<typeof signupFormSchema>;
@@ -61,22 +61,22 @@ export function SignupForm() {
         setDocumentNonBlocking(userRef, userData, {});
       }
       toast({
-        title: "Account Created",
-        description: "Welcome! You have been successfully signed up.",
+        title: "Compte créé",
+        description: "Bienvenue ! Votre inscription a été réussie.",
       });
       router.push("/");
     } catch (error: any) {
-        let description = "An unexpected error occurred. Please try again.";
+        let description = "Une erreur inattendue est survenue. Veuillez réessayer.";
         if (error.code === 'auth/email-already-in-use') {
-          description = "This email address is already in use. Please log in or use a different email.";
+          description = "Cette adresse e-mail est déjà utilisée. Veuillez vous connecter ou utiliser un autre e-mail.";
         } else if (error.code === 'auth/weak-password') {
-          description = "The password is too weak. Please use at least 6 characters.";
+          description = "Le mot de passe est trop faible. Veuillez utiliser au moins 6 caractères.";
         } else if (error.code === 'auth/invalid-email') {
-          description = "The email address is not valid. Please check and try again.";
+          description = "L'adresse e-mail n'est pas valide. Veuillez vérifier et réessayer.";
         }
         toast({
           variant: "destructive",
-          title: "Sign Up Failed",
+          title: "Échec de l'inscription",
           description: description,
         });
         setIsPending(false);
@@ -91,9 +91,9 @@ export function SignupForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel>Adresse e-mail</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="name@example.com" {...field} />
+                <Input type="email" placeholder="nom@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -104,7 +104,7 @@ export function SignupForm() {
           name="password"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Mot de passe</FormLabel>
               <div className="relative">
                 <FormControl>
                   <Input
@@ -117,7 +117,7 @@ export function SignupForm() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -131,7 +131,7 @@ export function SignupForm() {
           )}
         />
         <Button type="submit" className="w-full animate-in fade-in-0 zoom-in-95 duration-500" disabled={isPending} style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
-          {isPending ? "Creating account..." : "Sign Up"}
+          {isPending ? "Création du compte en cours..." : "S'inscrire"}
         </Button>
       </form>
     </Form>

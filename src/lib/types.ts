@@ -1,4 +1,4 @@
-export type AlertCategory = 'Security' | 'Road' | 'Power' | 'Water' | 'Health' | 'Other';
+export type AlertCategory = 'Sécurité' | 'Route' | 'Électricité' | 'Eau' | 'Santé' | 'Autre';
 export type AlertStatus = 'pending' | 'verified' | 'archived';
 
 export type Alert = {

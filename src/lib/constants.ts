@@ -1,12 +1,12 @@
 import type { AlertCategory } from './types';
 
 export const ALERT_CATEGORIES: AlertCategory[] = [
-  'Security',
-  'Road',
-  'Power',
-  'Water',
-  'Health',
-  'Other',
+  'Sécurité',
+  'Route',
+  'Électricité',
+  'Eau',
+  'Santé',
+  'Autre',
 ];
 
 // A list of neighborhoods in Goma for the location dropdown.
@@ -28,5 +28,5 @@ export const GOMA_NEIGHBORHOODS: string[] = [
   "Mikeno",
   "Murara",
   "Office",
-  "Other / Not Listed"
+  "Autre / Non listé"
 ];

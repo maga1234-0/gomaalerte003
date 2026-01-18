@@ -39,8 +39,8 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
       
       if (newAlert) {
         toast({
-          title: "New alert received",
-          description: newAlert.title || "A new incident has been reported.",
+          title: "Nouvelle alerte reçue",
+          description: newAlert.title || "Un nouvel incident a été signalé.",
         });
       }
     }
@@ -67,7 +67,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
         <h1 className="text-3xl font-bold font-headline text-primary text-center md:text-left">
-          Latest Alerts
+          Dernières alertes
         </h1>
       </div>
 
@@ -81,8 +81,8 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-muted-foreground">
-              <p className="text-lg font-semibold">No alerts have been posted yet.</p>
-              <p>Be the first to share an update with the community.</p>
+              <p className="text-lg font-semibold">Aucune alerte n'a encore été publiée.</p>
+              <p>Soyez le premier à partager une mise à jour avec la communauté.</p>
             </div>
           </CardContent>
         </Card>

@@ -17,7 +17,7 @@ export function SiteHeader() {
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
             <Bell className="h-6 w-6 text-primary" />
-            <span className="inline-block font-bold font-headline text-lg">Goma Alert</span>
+            <span className="inline-block font-bold font-headline text-lg">Goma Alerte</span>
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
@@ -29,21 +29,21 @@ export function SiteHeader() {
                 <Link href="/report">
                   <Button>
                     <PlusCircle />
-                    <span className="hidden sm:inline">New Alert</span>
+                    <span className="hidden sm:inline">Nouvelle Alerte</span>
                   </Button>
                 </Link>
                 <Button onClick={logout} variant="secondary">
                   <LogOut />
-                  <span className="hidden sm:inline">Logout</span>
+                  <span className="hidden sm:inline">Déconnexion</span>
                 </Button>
               </>
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="outline">Login</Button>
+                  <Button variant="outline">Connexion</Button>
                 </Link>
                  <Link href="/signup">
-                  <Button>Sign Up</Button>
+                  <Button>S'inscrire</Button>
                 </Link>
               </>
             )}

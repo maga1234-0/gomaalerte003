@@ -53,15 +53,15 @@ export default function AdminPage() {
     <div className="container mx-auto px-4 py-8">
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline text-2xl">Admin Dashboard</CardTitle>
-          <CardDescription>Manage users of the Goma Alert platform.</CardDescription>
+          <CardTitle className="font-headline text-2xl">Tableau de bord administrateur</CardTitle>
+          <CardDescription>Gérez les utilisateurs de la plateforme Goma Alerte.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Email</TableHead>
-                <TableHead>Joined On</TableHead>
+                <TableHead>E-mail</TableHead>
+                <TableHead>Inscrit le</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -75,7 +75,7 @@ export default function AdminPage() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={2} className="h-24 text-center">
-                    No users found.
+                    Aucun utilisateur trouvé.
                   </TableCell>
                 </TableRow>
               )}

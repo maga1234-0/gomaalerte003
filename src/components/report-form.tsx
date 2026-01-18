@@ -74,8 +74,8 @@ export function ReportForm() {
     if (typeof navigator.mediaDevices === 'undefined' || !navigator.mediaDevices.getUserMedia) {
         toast({
             variant: "destructive",
-            title: "Media Not Supported",
-            description: "Audio recording is not supported on this browser or device.",
+            title: "Média non pris en charge",
+            description: "L'enregistrement audio n'est pas pris en charge par ce navigateur ou cet appareil.",
         });
         setHasMicPermission(false);
         setIsRecordingDialogOpen(false);
@@ -97,8 +97,8 @@ export function ReportForm() {
       if (!supportedMimeType) {
         toast({
             variant: "destructive",
-            title: "Recording not supported",
-            description: "Your browser does not support any of the required audio formats.",
+            title: "Enregistrement non pris en charge",
+            description: "Votre navigateur ne prend en charge aucun des formats audio requis.",
         });
         setIsRecordingDialogOpen(false);
         return;
@@ -131,15 +131,15 @@ export function ReportForm() {
       setIsRecording(true);
       setAudioDataUri(null);
       toast({
-        title: "Recording started...",
+        title: "Enregistrement démarré...",
       });
     } catch (err) {
-      console.error("Failed to start recording", err);
+      console.error("Échec du démarrage de l'enregistrement", err);
       setHasMicPermission(false);
       toast({
         variant: "destructive",
-        title: "Microphone Error",
-        description: "Could not access microphone. Please check your browser permissions.",
+        title: "Erreur de microphone",
+        description: "Impossible d'accéder au microphone. Veuillez vérifier les autorisations de votre navigateur.",
       });
       setIsRecordingDialogOpen(false);
     }
@@ -151,8 +151,8 @@ export function ReportForm() {
       setIsRecording(false);
       setIsRecordingDialogOpen(false);
       toast({
-        title: "Recording stopped",
-        description: "Your audio report has been attached.",
+        title: "Enregistrement arrêté",
+        description: "Votre rapport audio a été joint.",
       });
     }
   };
@@ -164,7 +164,7 @@ export function ReportForm() {
       if (mediaRecorderRef.current && isRecording) {
           mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
           setIsRecording(false);
-          toast({ title: "Recording cancelled." });
+          toast({ title: "Enregistrement annulé." });
       }
       setIsRecordingDialogOpen(false);
     }
@@ -180,8 +180,8 @@ export function ReportForm() {
     if (!user || !firestore) {
         toast({
             variant: "destructive",
-            title: "Authentication Error",
-            description: "You must be logged in to submit a report.",
+            title: "Erreur d'authentification",
+            description: "Vous devez être connecté pour envoyer un rapport.",
         });
         if (!user) router.push("/login");
         return;
@@ -209,8 +209,8 @@ export function ReportForm() {
       addDocumentNonBlocking(alertsCollection, reportData);
       
       toast({
-        title: "Report Submitted",
-        description: "Thank you for keeping our community safe.",
+        title: "Rapport envoyé",
+        description: "Merci de veiller à la sécurité de notre communauté.",
       });
       router.push("/");
     });
@@ -224,9 +224,9 @@ export function ReportForm() {
           name="title"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Titre</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Roadblock on Main Street" {...field} />
+                <Input placeholder="ex: Route barrée sur la rue principale" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -240,7 +240,7 @@ export function ReportForm() {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Provide a detailed description of the incident."
+                  placeholder="Fournissez une description détaillée de l'incident."
                   className="min-h-[120px]"
                   {...field}
                 />
@@ -255,11 +255,11 @@ export function ReportForm() {
             name="category"
             render={({ field }) => (
               <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Catégorie</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
+                      <SelectValue placeholder="Sélectionnez une catégorie" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -279,11 +279,11 @@ export function ReportForm() {
             name="location"
             render={({ field }) => (
               <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '450ms', animationFillMode: 'backwards' }}>
-                <FormLabel>Location</FormLabel>
+                <FormLabel>Lieu</FormLabel>
                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a neighborhood" />
+                      <SelectValue placeholder="Sélectionnez un quartier" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -301,12 +301,12 @@ export function ReportForm() {
         </div>
         
         <div className="space-y-2 animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
-            <FormLabel>Voice Report (Optional)</FormLabel>
+            <FormLabel>Rapport vocal (facultatif)</FormLabel>
             <div className="rounded-lg border p-4 space-y-4">
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                     <div className="flex-grow w-full">
                         <p className="text-sm text-muted-foreground">
-                            If you can't type, you can record a short audio report instead.
+                            Si vous ne pouvez pas écrire, vous pouvez enregistrer un court rapport audio à la place.
                         </p>
                     </div>
                     
@@ -314,14 +314,14 @@ export function ReportForm() {
                         <DialogTrigger asChild>
                             <Button type="button" disabled={isPending || hasMicPermission === false} className="w-full sm:w-auto flex-shrink-0">
                                 <Mic className="mr-2 h-4 w-4" /> 
-                                Record Audio
+                                Enregistrer un audio
                             </Button>
                         </DialogTrigger>
                         <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                                <DialogTitle className="text-center">Recording Audio</DialogTitle>
+                                <DialogTitle className="text-center">Enregistrement audio</DialogTitle>
                                 <DialogDescription className="text-center">
-                                    Speak clearly into your microphone. The recording will start automatically.
+                                    Parlez clairement dans votre microphone. L'enregistrement commencera automatically.
                                 </DialogDescription>
                             </DialogHeader>
                             <div className="flex flex-col items-center justify-center gap-4 py-8">
@@ -334,12 +334,12 @@ export function ReportForm() {
                                     )}
                                 </div>
                                 <p className="text-sm text-muted-foreground">
-                                    {isRecording ? "Recording in progress..." : "Waiting to start..."}
+                                    {isRecording ? "Enregistrement en cours..." : "En attente de démarrage..."}
                                 </p>
                             </div>
                             <Button type="button" onClick={handleStopRecording} variant="destructive" className="w-full" disabled={!isRecording}>
                                 <Square className="mr-2 h-4 w-4" /> 
-                                Stop Recording
+                                Arrêter l'enregistrement
                             </Button>
                         </DialogContent>
                     </Dialog>
@@ -348,19 +348,19 @@ export function ReportForm() {
                 {hasMicPermission === false && (
                     <Alert variant="destructive">
                         <MicOff className="h-4 w-4" />
-                        <AlertTitle>Microphone Access Required</AlertTitle>
+                        <AlertTitle>Accès au microphone requis</AlertTitle>
                         <AlertDescription>
-                        To record an audio report, please allow microphone access in your browser settings.
+                        Pour enregistrer un rapport audio, veuillez autoriser l'accès au microphone dans les paramètres de votre navigateur.
                         </AlertDescription>
                     </Alert>
                 )}
 
                 {audioDataUri && (
                     <div className="space-y-2 pt-4 border-t">
-                        <p className="text-sm font-medium text-muted-foreground">Audio Preview</p>
+                        <p className="text-sm font-medium text-muted-foreground">Aperçu audio</p>
                         <audio src={audioDataUri} controls className="w-full" />
                         <Button variant="link" size="sm" className="p-0 h-auto text-destructive" onClick={() => setAudioDataUri(null)}>
-                            Remove audio
+                            Supprimer l'audio
                         </Button>
                     </div>
                 )}
@@ -368,7 +368,7 @@ export function ReportForm() {
         </div>
 
         <Button type="submit" disabled={isPending || !user} className="animate-in fade-in-0 zoom-in-95 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
-          {isPending ? "Submitting..." : "Submit Report"}
+          {isPending ? "Envoi en cours..." : "Envoyer le rapport"}
         </Button>
       </form>
     </Form>

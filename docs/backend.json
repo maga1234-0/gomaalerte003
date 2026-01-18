@@ -2,69 +2,69 @@
   "entities": {
     "UserProfile": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "User Profile",
+      "title": "Profil Utilisateur",
       "type": "object",
-      "description": "Represents a user's public profile.",
+      "description": "Représente le profil public d'un utilisateur.",
       "properties": {
         "uid": {
           "type": "string",
-          "description": "The user's unique ID."
+          "description": "L'ID unique de l'utilisateur."
         },
         "email": {
           "type": "string",
           "format": "email",
-          "description": "The user's email address."
+          "description": "L'adresse e-mail de l'utilisateur."
         },
         "createdAt": {
           "type": "string",
           "format": "date-time",
-          "description": "Timestamp of when the user account was created."
+          "description": "Horodatage de la création du compte utilisateur."
         }
       },
       "required": ["uid", "email", "createdAt"]
     },
     "Alert": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Alert",
+      "title": "Alerte",
       "type": "object",
-      "description": "Represents an alert submitted by a user.",
+      "description": "Représente une alerte soumise par un utilisateur.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the alert."
+          "description": "Identifiant unique de l'alerte."
         },
         "title": {
           "type": "string",
-          "description": "Title of the alert."
+          "description": "Titre de l'alerte."
         },
         "description": {
           "type": "string",
-          "description": "Detailed description of the incident or alert."
+          "description": "Description détaillée de l'incident ou de l'alerte."
         },
         "category": {
           "type": "string",
-          "description": "Category of the alert (e.g., Security, Road, Power, Water, Health, Other)."
+          "description": "Catégorie de l'alerte (par exemple, Sécurité, Route, Électricité, Eau, Santé, Autre)."
         },
         "location": {
           "type": "string",
-          "description": "Location of the incident (neighborhood/area in Goma)."
+          "description": "Lieu de l'incident (quartier/zone à Goma)."
         },
         "status": {
           "type": "string",
-          "description": "Status of the alert (verified, archived)."
+          "description": "Statut de l'alerte (vérifiée, archivée)."
         },
         "createdAt": {
           "type": "string",
-          "description": "Timestamp of when the alert was created.",
+          "description": "Horodatage de la création de l'alerte.",
           "format": "date-time"
         },
         "userId": {
           "type": "string",
-          "description": "The ID of the user who submitted the alert."
+          "description": "L'ID de l'utilisateur qui a soumis l'alerte."
         },
         "audioUrl": {
           "type": "string",
-          "description": "A data URI of the recorded audio report.",
+          "description": "Un URI de données du rapport audio enregistré.",
           "format": "uri"
         }
       },
@@ -86,13 +86,13 @@
       "schema": {
         "$ref": "#/entities/Alert"
       },
-      "description": "Collection of alerts. Includes fields like title, description, category, location, status, and createdAt. The 'userId' field contains the UID of the user who created the alert."
+      "description": "Collection d'alertes. Comprend des champs comme le titre, la description, la catégorie, le lieu, le statut et createdAt. Le champ 'userId' contient l'UID de l'utilisateur qui a créé l'alerte."
     },
     "/users/{userId}": {
       "schema": {
         "$ref": "#/entities/UserProfile"
       },
-      "description": "Collection of user profiles. The 'userId' is the same as the Firebase Auth UID."
+      "description": "Collection de profils utilisateur. Le 'userId' est le même que l'UID de Firebase Auth."
     }
   }
 }

@@ -38,9 +38,9 @@ export default function ReportPage() {
       <div className="mx-auto max-w-2xl">
         <Card className="animate-in fade-in-0 zoom-in-95 duration-300">
           <CardHeader className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
-            <CardTitle className="font-headline text-2xl">Report a New Incident</CardTitle>
+            <CardTitle className="font-headline text-2xl">Signaler un nouvel incident</CardTitle>
             <CardDescription>
-              Your report helps keep the community informed. Please provide as much detail as possible.
+              Votre signalement aide à garder la communauté informée. Veuillez fournir autant de détails que possible.
             </CardDescription>
           </CardHeader>
           <CardContent>

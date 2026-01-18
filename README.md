@@ -1,20 +1,20 @@
-# Goma Alert
+# Goma Alerte
 
-This is a Next.js application for the Goma Alert platform, a web-based community alert system for Goma, Democratic Republic of Congo.
+Ceci est une application Next.js pour la plateforme Goma Alerte, un système d'alerte communautaire basé sur le Web pour Goma, en République Démocratique du Congo.
 
-It helps residents receive verified, real-time alerts about daily incidents such as insecurity, road closures, power outages, and more.
+Elle aide les résidents à recevoir des alertes vérifiées et en temps réel sur les incidents quotidiens tels que l'insécurité, les fermetures de routes, les pannes de courant, et plus encore.
 
-## Getting Started
+## Pour commencer
 
-To get started, run the development server:
+Pour commencer, lancez le serveur de développement :
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:9002](http://localhost:9002) with your browser to see the result.
+Ouvrez [http://localhost:9002](http://localhost:9002) avec votre navigateur pour voir le résultat.
 
-The main pages are:
-- **Alert Feed**: `src/app/page.tsx`
-- **Incident Reporting**: `src/app/report/page.tsx`
-- **Admin Dashboard**: `src/app/admin/page.tsx`
+Les pages principales sont :
+- **Fil d'alertes**: `src/app/page.tsx`
+- **Signalement d'incident**: `src/app/report/page.tsx`
+- **Tableau de bord administrateur**: `src/app/admin/page.tsx`

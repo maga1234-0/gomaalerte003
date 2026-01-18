@@ -9,8 +9,8 @@ import { OnlineStatusIndicator } from "@/components/online-status-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "",
-  description: "",
+  title: "Goma Alerte",
+  description: "Plateforme communautaire d'alertes en temps réel pour la ville de Goma.",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="fr" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

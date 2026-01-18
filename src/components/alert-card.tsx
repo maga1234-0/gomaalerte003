@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import type { Alert, AlertCategory } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
+import { fr } from "date-fns/locale";
 import {
   ShieldAlert,
   TrafficCone,
@@ -59,32 +60,32 @@ const categoryThemes: Record<
     badgeClasses: string;
   }
 > = {
-  Security: {
+  Sécurité: {
     icon: ShieldAlert,
     colorClasses: "border-l-red-500",
     badgeClasses: "bg-red-100 text-red-800 hover:bg-red-200",
   },
-  Health: {
+  Santé: {
     icon: HeartPulse,
     colorClasses: "border-l-red-500",
     badgeClasses: "bg-red-100 text-red-800 hover:bg-red-200",
   },
-  Road: {
+  Route: {
     icon: TrafficCone,
     colorClasses: "border-l-yellow-500",
     badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
   },
-  Power: {
+  Électricité: {
     icon: Zap,
     colorClasses: "border-l-yellow-500",
     badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
   },
-  Water: {
+  Eau: {
     icon: Droplets,
     colorClasses: "border-l-yellow-500",
     badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
   },
-  Other: {
+  Autre: {
     icon: HelpCircle,
     colorClasses: "border-l-blue-500",
     badgeClasses: "bg-blue-100 text-blue-800 hover:bg-blue-200",
@@ -97,12 +98,12 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
   const { toast } = useToast();
 
   const isOwner = user && user.uid === alert.userId;
-  const category = alert.category || 'Other';
+  const category = alert.category || 'Autre';
   const { icon: CategoryIcon, colorClasses, badgeClasses } = categoryThemes[category];
 
   const handleShare = async () => {
-    const title = `Goma Alert: ${alert.title}`;
-    const text = `Goma Alert: ${alert.title}\n\n${alert.description}\n\nLocation: ${alert.location}\n\nStay informed with Goma Alert.`;
+    const title = `Goma Alerte: ${alert.title}`;
+    const text = `Goma Alerte: ${alert.title}\n\n${alert.description}\n\nLieu: ${alert.location}\n\nRestez informé avec Goma Alerte.`;
 
     if (alert.audioUrl && navigator.share) {
       try {
@@ -119,7 +120,7 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
         };
         const extension = getFileExtension(blob.type);
         
-        const file = new File([blob], `goma-alert-${alert.id}.${extension}`, { type: blob.type });
+        const file = new File([blob], `goma-alerte-${alert.id}.${extension}`, { type: blob.type });
 
         const shareData = {
           title,
@@ -131,7 +132,7 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
         await navigator.share(shareData);
         return; // If share is successful, we're done.
       } catch (error) {
-        console.error("Web Share API with file failed, falling back to text-only share.", error);
+        console.error("L'API de partage Web avec fichier a échoué, retour au partage de texte uniquement.", error);
         // Fallback to text-only share below.
       }
     }
@@ -148,8 +149,8 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
     deleteDocumentNonBlocking(alertRef);
 
     toast({
-      title: "Alert Deleted",
-      description: "The alert has been permanently removed for all users.",
+      title: "Alerte supprimée",
+      description: "L'alerte a été définitivement supprimée pour tous les utilisateurs.",
     });
 
     // Also hide it from the current user's view immediately for a better UX.
@@ -159,8 +160,8 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
   const handleDeleteForMe = () => {
     onHide(alert.id);
     toast({
-        title: "Alert Hidden",
-        description: "This alert will no longer appear in your feed.",
+        title: "Alerte masquée",
+        description: "Cette alerte n'apparaîtra plus dans votre fil d'actualité.",
     });
   };
 
@@ -195,7 +196,7 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
                     <CategoryIcon className="h-3 w-3 mr-1" />
                     {category}
                 </Badge>
-                <CardTitle className="font-headline text-xl break-words">{alert.title || "Untitled Alert"}</CardTitle>
+                <CardTitle className="font-headline text-xl break-words">{alert.title || "Alerte sans titre"}</CardTitle>
             </div>
             <div className="text-xs text-muted-foreground sm:text-right flex-shrink-0 order-1 sm:order-2 w-full sm:w-auto flex justify-between sm:block">
                 <p className="break-all">{alert.location || "Goma"}</p>
@@ -203,6 +204,7 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
                     <p className="flex-shrink-0">
                         {formatDistanceToNow(createdAtDate, {
                         addSuffix: true,
+                        locale: fr,
                         })}
                     </p>
                 )}
@@ -214,7 +216,7 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
         {alert.audioUrl && (
           <div className="mt-4">
             <audio controls src={alert.audioUrl} className="w-full">
-              Your browser does not support the audio element.
+              Votre navigateur ne prend pas en charge l'élément audio.
             </audio>
           </div>
         )}
@@ -224,17 +226,17 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-9 w-9">
                     <MoreVertical className="h-4 w-4" />
-                    <span className="sr-only">More options</span>
+                    <span className="sr-only">Plus d'options</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={handleShare}>
                     <Share2 className="mr-2 h-4 w-4" />
-                    <span>Share</span>
+                    <span>Partager</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleDeleteForMe}>
                     <Trash2 className="mr-2 h-4 w-4" />
-                    <span>Hide for me</span>
+                    <span>Masquer pour moi</span>
                 </DropdownMenuItem>
                 {isOwner && (
                     <>
@@ -246,20 +248,20 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
                                     onSelect={(e) => e.preventDefault()} // Prevents Dropdown from closing
                                 >
                                     <Trash2 className="mr-2 h-4 w-4" />
-                                    <span>Delete for all</span>
+                                    <span>Supprimer pour tous</span>
                                 </DropdownMenuItem>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogTitle>Êtes-vous absolutely sûr ?</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                    This action cannot be undone. This will permanently delete the alert from our servers for everyone.
+                                    Cette action est irréversible. Cela supprimera définitivement l'alerte de nos serveurs pour tout le monde.
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogCancel>Annuler</AlertDialogCancel>
                                     <AlertDialogAction onClick={handleDeleteForAll} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                    Delete Permanently
+                                    Supprimer définitivement
                                     </AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>

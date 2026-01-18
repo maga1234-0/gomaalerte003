@@ -22,8 +22,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 const loginFormSchema = z.object({
-  email: z.string().email("Please enter a valid email address."),
-  password: z.string().min(1, "Password cannot be empty."),
+  email: z.string().email("Veuillez entrer une adresse e-mail valide."),
+  password: z.string().min(1, "Le mot de passe ne peut pas être vide."),
 });
 
 type LoginFormValues = z.infer<typeof loginFormSchema>;
@@ -48,18 +48,18 @@ export function LoginForm() {
     try {
       await initiateEmailSignIn(auth, data.email, data.password);
       toast({
-        title: "Login Successful",
-        description: "Welcome back! You are now logged in.",
+        title: "Connexion réussie",
+        description: "Bon retour ! Vous êtes maintenant connecté.",
       });
       router.push("/");
     } catch (error: any) {
-      let description = "An unexpected error occurred. Please try again.";
+      let description = "Une erreur inattendue est survenue. Veuillez réessayer.";
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-          description = "The email or password you entered is incorrect. Please check your credentials and try again.";
+          description = "L'e-mail ou le mot de passe que vous avez entré est incorrect. Veuillez vérifier vos informations et réessayer.";
       }
       toast({
         variant: "destructive",
-        title: "Login Failed",
+        title: "Échec de la connexion",
         description: description,
       });
       setIsPending(false);
@@ -74,9 +74,9 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
-              <FormLabel>Email Address</FormLabel>
+              <FormLabel>Adresse e-mail</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="name@example.com" {...field} />
+                <Input type="email" placeholder="nom@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -87,7 +87,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Mot de passe</FormLabel>
               <div className="relative">
                 <FormControl>
                   <Input
@@ -100,7 +100,7 @@ export function LoginForm() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -114,7 +114,7 @@ export function LoginForm() {
           )}
         />
         <Button type="submit" className="w-full animate-in fade-in-0 zoom-in-95 duration-500" disabled={isPending} style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
-          {isPending ? "Logging in..." : "Log In"}
+          {isPending ? "Connexion en cours..." : "Se connecter"}
         </Button>
       </form>
     </Form>
