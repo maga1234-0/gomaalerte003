@@ -181,7 +181,6 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
     <Card
       className={cn(
         "overflow-hidden border-l-4 shadow-sm transition-all duration-300 hover:shadow-lg hover:scale-[1.01]",
-        "animate-in fade-in-0 slide-in-from-top-5 duration-500",
         colorClasses
       )}
     >
