@@ -49,7 +49,6 @@ import { useToast } from "@/hooks/use-toast";
 interface AlertCardProps {
   alert: Alert;
   onHide: (alertId: string) => void;
-  index?: number;
 }
 
 const categoryThemes: Record<
@@ -92,14 +91,15 @@ const categoryThemes: Record<
   },
 };
 
-export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
+export function AlertCard({ alert, onHide }: AlertCardProps) {
   const { user } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
 
   const isOwner = user && user.uid === alert.userId;
   const category: AlertCategory = (alert.category && categoryThemes.hasOwnProperty(alert.category)) ? alert.category : 'Autre';
-  const { icon: CategoryIcon, colorClasses, badgeClasses } = categoryThemes[category];
+  const theme = categoryThemes[category] || categoryThemes['Autre'];
+  const { icon: CategoryIcon, colorClasses, badgeClasses } = theme;
 
   const handleShare = async () => {
     const title = `Goma Alerte: ${alert.title}`;
@@ -184,10 +184,6 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
         "animate-in fade-in-0 slide-in-from-top-5 duration-500",
         colorClasses
       )}
-      style={{
-        animationDelay: `${index * 75}ms`,
-        animationFillMode: "backwards",
-      }}
     >
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
