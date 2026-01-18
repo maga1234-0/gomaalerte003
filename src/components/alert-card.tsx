@@ -98,7 +98,7 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
   const { toast } = useToast();
 
   const isOwner = user && user.uid === alert.userId;
-  const category = alert.category || 'Autre';
+  const category: AlertCategory = (alert.category && categoryThemes.hasOwnProperty(alert.category)) ? alert.category : 'Autre';
   const { icon: CategoryIcon, colorClasses, badgeClasses } = categoryThemes[category];
 
   const handleShare = async () => {
