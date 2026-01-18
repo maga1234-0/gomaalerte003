@@ -26,14 +26,14 @@ export default function SignupPage() {
 
   if (isAuthLoading || isAuthenticated) {
     return (
-        <div className="container mx-auto flex items-center justify-center py-12">
+        <div className="container mx-auto flex items-center justify-center py-6 md:py-12">
             <Skeleton className="h-96 w-full max-w-md" />
         </div>
     );
   }
 
   return (
-    <div className="container mx-auto flex items-center justify-center py-12">
+    <div className="container mx-auto flex items-center justify-center py-6 md:py-12">
       <Card className="w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300">
         <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
           <CardTitle className="font-headline text-2xl">Créer un compte</CardTitle>

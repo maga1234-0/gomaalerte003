@@ -13,15 +13,15 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <div className="flex gap-6 md:gap-10">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
             <Bell className="h-6 w-6 text-primary" />
-            <span className="inline-block font-bold font-headline text-lg">Goma Alerte</span>
+            <span className="hidden sm:inline-block font-bold font-headline text-lg">Goma Alerte</span>
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-2">
+        <div className="flex flex-1 items-center justify-end">
+          <nav className="flex items-center gap-2">
             {isAuthLoading ? (
               <Skeleton className="h-10 w-24" />
             ) : isAuthenticated ? (

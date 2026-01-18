@@ -367,7 +367,7 @@ export function ReportForm() {
             </div>
         </div>
 
-        <Button type="submit" disabled={isPending || !user} className="animate-in fade-in-0 zoom-in-95 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
+        <Button type="submit" disabled={isPending || !user} className="w-full sm:w-auto animate-in fade-in-0 zoom-in-95 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
           {isPending ? "Envoi en cours..." : "Envoyer le rapport"}
         </Button>
       </form>

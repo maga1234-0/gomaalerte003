@@ -25,7 +25,7 @@ export default function AdminPage() {
 
   if (loading || !isAuthenticated) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-4 md:py-8">
         <Card>
           <CardHeader>
             <Skeleton className="h-8 w-48" />
@@ -50,7 +50,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-4 md:py-8">
       <Card>
         <CardHeader>
           <CardTitle className="font-headline text-2xl">Tableau de bord administrateur</CardTitle>
