@@ -39,12 +39,7 @@ export function SiteHeader() {
               </>
             ) : (
               <>
-                <Link href="/login">
-                  <Button variant="outline">Connexion</Button>
-                </Link>
-                 <Link href="/signup">
-                  <Button>S'inscrire</Button>
-                </Link>
+                {/* Login and signup buttons removed as requested */}
               </>
             )}
             <ThemeToggle />
