@@ -253,7 +253,7 @@ export function AlertCard({ alert, onHide, index = 0 }: AlertCardProps) {
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
-                                    <AlertDialogTitle>Êtes-vous absolutely sûr ?</AlertDialogTitle>
+                                    <AlertDialogTitle>Êtes-vous absolument sûr ?</AlertDialogTitle>
                                     <AlertDialogDescription>
                                     Cette action est irréversible. Cela supprimera définitivement l'alerte de nos serveurs pour tout le monde.
                                     </AlertDialogDescription>

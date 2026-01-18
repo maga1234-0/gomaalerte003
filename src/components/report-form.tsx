@@ -321,7 +321,7 @@ export function ReportForm() {
                             <DialogHeader>
                                 <DialogTitle className="text-center">Enregistrement audio</DialogTitle>
                                 <DialogDescription className="text-center">
-                                    Parlez clairement dans votre microphone. L'enregistrement commencera automatically.
+                                    Parlez clairement dans votre microphone. L'enregistrement commencera automatiquement.
                                 </DialogDescription>
                             </DialogHeader>
                             <div className="flex flex-col items-center justify-center gap-4 py-8">
