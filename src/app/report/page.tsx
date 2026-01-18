@@ -25,7 +25,7 @@ export default function ReportPage() {
 
   if (isAuthLoading || !isAuthenticated) {
     return (
-      <div className="container mx-auto px-4 py-4 md:py-8">
+      <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl">
             <Skeleton className="h-96 w-full" />
         </div>
@@ -34,11 +34,11 @@ export default function ReportPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-4 md:py-8">
+    <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl">
-        <Card className="animate-in fade-in-0 zoom-in-95 duration-300">
-          <CardHeader className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
-            <CardTitle className="font-headline text-2xl">Signaler un nouvel incident</CardTitle>
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline text-2xl md:text-3xl">Signaler un nouvel incident</CardTitle>
             <CardDescription>
               Votre signalement aide à garder la communauté informée. Veuillez fournir autant de détails que possible.
             </CardDescription>

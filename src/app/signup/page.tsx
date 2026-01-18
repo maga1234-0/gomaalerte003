@@ -26,24 +26,24 @@ export default function SignupPage() {
 
   if (isAuthLoading || isAuthenticated) {
     return (
-        <div className="container mx-auto flex items-center justify-center py-6 md:py-12">
+        <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
             <Skeleton className="h-96 w-full max-w-md" />
         </div>
     );
   }
 
   return (
-    <div className="container mx-auto flex items-center justify-center py-6 md:py-12">
-      <Card className="w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300">
-        <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
-          <CardTitle className="font-headline text-2xl">Créer un compte</CardTitle>
+    <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="font-headline text-2xl md:text-3xl">Créer un compte</CardTitle>
           <CardDescription>
             Rejoignez Goma Alerte pour rester informé et signaler des incidents.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <SignupForm />
-          <p className="mt-4 text-center text-sm text-muted-foreground animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
             Vous avez déjà un compte ?{' '}
             <Link href="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
               Connectez-vous

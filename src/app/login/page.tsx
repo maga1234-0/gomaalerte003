@@ -40,31 +40,31 @@ export default function LoginPage() {
 
   if (isAuthLoading || isAuthenticated) {
     return (
-        <div className="container mx-auto flex items-center justify-center py-6 md:py-12">
+        <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
             <Skeleton className="h-[550px] w-full max-w-md" />
         </div>
     );
   }
 
   return (
-    <div className="container mx-auto flex items-center justify-center py-6 md:py-12">
-      <Card className={cn("w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300")}>
-        <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
-          <CardTitle className="font-headline text-2xl">Bienvenue sur Goma Alerte</CardTitle>
+    <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-8rem)] px-4">
+      <Card className={cn("w-full max-w-md")}>
+        <CardHeader className="text-center">
+          <CardTitle className="font-headline text-2xl md:text-3xl">Bienvenue sur Goma Alerte</CardTitle>
           <CardDescription>
             Connectez-vous à votre compte pour signaler des incidents et voir les alertes.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />
-          <p className="mt-4 text-center text-sm text-muted-foreground animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
             Vous n'avez pas de compte ?{' '}
             <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline">
               Inscrivez-vous
             </Link>
           </p>
         </CardContent>
-        <CardFooter className="flex flex-col items-center justify-center gap-4 pt-6 border-t animate-in fade-in-0 slide-in-from-bottom-5 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
+        <CardFooter className="flex flex-col items-center justify-center gap-4 pt-6 border-t">
           <p className="text-sm text-muted-foreground">Scannez pour ouvrir sur votre téléphone</p>
           
           {isLocalhost ? (
@@ -80,7 +80,7 @@ export default function LoginPage() {
               <QRCode value={url} size={128} />
             </div>
           ) : (
-            <Skeleton className="h-36 w-36" />
+            <Skeleton className="h-32 w-32" />
           )}
 
         </CardFooter>

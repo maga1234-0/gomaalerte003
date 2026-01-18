@@ -23,11 +23,11 @@ export default function Home() {
 
   if (loading || !isAuthenticated) {
     return (
-      <div className="container mx-auto px-4 py-4 sm:py-8 space-y-6">
+      <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8 space-y-6">
         <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
             <Skeleton className="h-10 w-48" />
         </div>
-        <div className="grid gap-4">
+        <div className="flex flex-col gap-4">
             <Skeleton className="h-48 w-full" />
             <Skeleton className="h-48 w-full" />
             <Skeleton className="h-48 w-full" />
@@ -37,7 +37,7 @@ export default function Home() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-4 sm:py-8">
+    <div className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <AlertFeed initialAlerts={alerts || []} />
     </div>
   );

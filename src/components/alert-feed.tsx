@@ -67,7 +67,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-        <h1 className="text-3xl font-bold font-headline text-primary text-center md:text-left">
+        <h1 className="text-2xl sm:text-3xl font-bold font-headline text-primary text-center md:text-left">
           Dernières alertes
         </h1>
       </div>

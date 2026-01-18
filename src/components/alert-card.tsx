@@ -62,32 +62,32 @@ const categoryThemes: Record<
   Sécurité: {
     icon: ShieldAlert,
     colorClasses: "border-l-red-500",
-    badgeClasses: "bg-red-100 text-red-800 hover:bg-red-200",
+    badgeClasses: "bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900/50 dark:text-red-200",
   },
   Santé: {
     icon: HeartPulse,
     colorClasses: "border-l-red-500",
-    badgeClasses: "bg-red-100 text-red-800 hover:bg-red-200",
+    badgeClasses: "bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900/50 dark:text-red-200",
   },
   Route: {
     icon: TrafficCone,
     colorClasses: "border-l-yellow-500",
-    badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
+    badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/50 dark:text-yellow-200",
   },
   Électricité: {
     icon: Zap,
     colorClasses: "border-l-yellow-500",
-    badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
+    badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/50 dark:text-yellow-200",
   },
   Eau: {
     icon: Droplets,
     colorClasses: "border-l-yellow-500",
-    badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
+    badgeClasses: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900/50 dark:text-yellow-200",
   },
   Autre: {
     icon: HelpCircle,
     colorClasses: "border-l-blue-500",
-    badgeClasses: "bg-blue-100 text-blue-800 hover:bg-blue-200",
+    badgeClasses: "bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-200",
   },
 };
 
@@ -160,8 +160,8 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
   const handleDeleteForMe = () => {
     onHide(alert.id);
     toast({
-        title: "Alerte masquée",
-        description: "Cette alerte n'apparaîtra plus dans votre fil d'actualité.",
+        title: "Alerte supprimée",
+        description: "Cette alerte a été supprimée de votre fil d'actualité.",
     });
   };
 
@@ -180,21 +180,21 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
   return (
     <Card
       className={cn(
-        "overflow-hidden border-l-4 shadow-sm transition-shadow duration-200 hover:shadow-lg",
+        "overflow-hidden border-l-4 shadow-sm transition-shadow duration-200 hover:shadow-md",
         colorClasses
       )}
     >
-      <CardHeader>
+      <CardHeader className="p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
             <div className="flex-grow order-2 sm:order-1">
                 <Badge variant="outline" className={cn("mb-2", badgeClasses)}>
                     <CategoryIcon className="h-3 w-3 mr-1" />
                     {category}
                 </Badge>
-                <CardTitle className="font-headline text-xl break-words">{alert.title || "Alerte sans titre"}</CardTitle>
+                <CardTitle className="font-headline text-lg sm:text-xl break-words">{alert.title || "Alerte sans titre"}</CardTitle>
             </div>
             <div className="text-xs text-muted-foreground sm:text-right flex-shrink-0 order-1 sm:order-2 w-full sm:w-auto flex justify-between sm:block">
-                <p className="break-all">{alert.location || "Goma"}</p>
+                <p className="break-all font-medium">{alert.location || "Goma"}</p>
                 {createdAtDate && (
                     <p className="flex-shrink-0">
                         {formatDistanceToNow(createdAtDate, {
@@ -206,7 +206,7 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
             </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-4 sm:px-6 pb-4">
         <p className="text-foreground/80">{alert.description}</p>
         {alert.audioUrl && (
           <div className="mt-4">
@@ -216,7 +216,7 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex justify-end gap-2">
+      <CardFooter className="flex justify-end gap-1 p-2 sm:p-3">
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-9 w-9">
@@ -231,7 +231,7 @@ export function AlertCard({ alert, onHide }: AlertCardProps) {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleDeleteForMe}>
                     <Trash2 className="mr-2 h-4 w-4" />
-                    <span>Masquer pour moi</span>
+                    <span>Supprimer pour moi</span>
                 </DropdownMenuItem>
                 {isOwner && (
                     <>
