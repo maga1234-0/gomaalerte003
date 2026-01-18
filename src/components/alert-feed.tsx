@@ -39,8 +39,8 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
       
       if (newAlert) {
         toast({
-          title: "",
-          description: newAlert.title || "",
+          title: "New alert received",
+          description: newAlert.title || "A new incident has been reported.",
         });
       }
     }
@@ -67,7 +67,7 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
         <h1 className="text-3xl font-bold font-headline text-primary text-center md:text-left">
-          
+          Latest Alerts
         </h1>
       </div>
 
@@ -81,8 +81,8 @@ export function AlertFeed({ initialAlerts }: AlertFeedProps) {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center text-muted-foreground">
-              <p className="text-lg font-semibold"></p>
-              <p></p>
+              <p className="text-lg font-semibold">No alerts have been posted yet.</p>
+              <p>Be the first to share an update with the community.</p>
             </div>
           </CardContent>
         </Card>

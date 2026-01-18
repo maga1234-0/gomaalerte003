@@ -50,29 +50,29 @@ export default function LoginPage() {
     <div className="container mx-auto flex items-center justify-center py-12">
       <Card className={cn("w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-300")}>
         <CardHeader className="text-center animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '100ms', animationFillMode: 'backwards' }}>
-          <CardTitle className="font-headline text-2xl"></CardTitle>
+          <CardTitle className="font-headline text-2xl">Welcome to Goma Alert</CardTitle>
           <CardDescription>
-            
+            Log in to your account to report incidents and view alerts.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />
           <p className="mt-4 text-center text-sm text-muted-foreground animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}>
-            {' '}
+            Don't have an account?{' '}
             <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline">
-              
+              Sign up
             </Link>
           </p>
         </CardContent>
         <CardFooter className="flex flex-col items-center justify-center gap-4 pt-6 border-t animate-in fade-in-0 slide-in-from-bottom-5 duration-500" style={{ animationDelay: '600ms', animationFillMode: 'backwards' }}>
-          <p className="text-sm text-muted-foreground"></p>
+          <p className="text-sm text-muted-foreground">Scan to open on your phone</p>
           
           {isLocalhost ? (
              <Alert>
                 <Terminal className="h-4 w-4" />
-                <AlertTitle></AlertTitle>
+                <AlertTitle>Developer Notice</AlertTitle>
                 <AlertDescription>
-                  
+                  QR code is hidden on localhost. It will be displayed and functional when your app is deployed to a public URL.
                 </AlertDescription>
               </Alert>
           ) : url ? (

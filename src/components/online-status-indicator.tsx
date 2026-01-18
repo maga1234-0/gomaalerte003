@@ -13,7 +13,7 @@ export function OnlineStatusIndicator() {
   return (
     <div className="bg-destructive text-destructive-foreground p-2 text-center text-sm font-medium flex items-center justify-center gap-2">
       <WifiOff className="h-4 w-4" />
-      <span></span>
+      <span>You are currently offline.</span>
     </div>
   );
 }

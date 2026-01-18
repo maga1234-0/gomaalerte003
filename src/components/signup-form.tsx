@@ -23,8 +23,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 const signupFormSchema = z.object({
-  email: z.string().email(""),
-  password: z.string().min(6, ""),
+  email: z.string().email("Please enter a valid email."),
+  password: z.string().min(6, "Password must be at least 6 characters."),
 });
 
 type SignupFormValues = z.infer<typeof signupFormSchema>;
@@ -61,18 +61,18 @@ export function SignupForm() {
         setDocumentNonBlocking(userRef, userData, {});
       }
       toast({
-        title: "",
-        description: "",
+        title: "Account Created",
+        description: "Welcome! You have been successfully signed up.",
       });
       router.push("/");
     } catch (error: any) {
-        let description = "";
+        let description = "An unexpected error occurred. Please try again.";
         if (error.code === 'auth/email-already-in-use') {
-          description = "";
+          description = "This email address is already in use. Please log in or use a different email.";
         } else if (error.code === 'auth/weak-password') {
-          description = "";
+          description = "The password is too weak. Please use at least 6 characters.";
         } else if (error.code === 'auth/invalid-email') {
-          description = "";
+          description = "The email address is not valid. Please check and try again.";
         }
         toast({
           variant: "destructive",
@@ -91,9 +91,9 @@ export function SignupForm() {
           name="email"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
-              <FormLabel></FormLabel>
+              <FormLabel>Email Address</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="" {...field} />
+                <Input type="email" placeholder="name@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -104,12 +104,12 @@ export function SignupForm() {
           name="password"
           render={({ field }) => (
             <FormItem className="animate-in fade-in-0 slide-in-from-top-5 duration-500" style={{ animationDelay: '300ms', animationFillMode: 'backwards' }}>
-              <FormLabel></FormLabel>
+              <FormLabel>Password</FormLabel>
               <div className="relative">
                 <FormControl>
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder=""
+                    placeholder="••••••••"
                     {...field}
                   />
                 </FormControl>
@@ -117,7 +117,7 @@ export function SignupForm() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
-                  aria-label=""
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -131,7 +131,7 @@ export function SignupForm() {
           )}
         />
         <Button type="submit" className="w-full animate-in fade-in-0 zoom-in-95 duration-500" disabled={isPending} style={{ animationDelay: '400ms', animationFillMode: 'backwards' }}>
-          {isPending ? "..." : ""}
+          {isPending ? "Creating account..." : "Sign Up"}
         </Button>
       </form>
     </Form>
